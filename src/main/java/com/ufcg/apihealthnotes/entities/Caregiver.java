@@ -14,16 +14,26 @@ public class Caregiver {
     @Id
     private String cpf;
     private String name;
+    private String password;
 
     @OneToMany(mappedBy="caregiver")
     private List<Patient> patients;
 
     public Caregiver(){}
 
-    public Caregiver(String cpf, String name) {
+    public Caregiver(String cpf, String name, String password) {
         this.cpf = cpf;
         this.name = name;
+        this.password = password;
         this.patients = new ArrayList<>();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getCpf() {

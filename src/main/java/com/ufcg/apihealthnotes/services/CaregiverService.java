@@ -13,7 +13,7 @@ public class CaregiverService {
     private CaregiverRepository caregiverRepository;
 
     public Caregiver saveCaregiver(CaregiverDTO caregiver) {
-        Caregiver newCaregiver = new Caregiver(caregiver.getCpf(), caregiver.getName());
+        Caregiver newCaregiver = new Caregiver(caregiver.getCpf(), caregiver.getName(), caregiver.getPassword());
         return this.caregiverRepository.save(newCaregiver);
     }
 

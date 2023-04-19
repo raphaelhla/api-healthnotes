@@ -12,6 +12,7 @@ public class Patient {
     @Id
     private String cpf;
     private String name;
+    private String password;
     private String birthday;
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Medicine> medicines;
@@ -27,10 +28,11 @@ public class Patient {
 
     public Patient(){}
 
-    public Patient(String cpf, String name, String birthday, List<Medicine> medicines,
+    public Patient(String cpf, String name, String password, String birthday, List<Medicine> medicines,
                    List<Vaccine> vaccines, List<Surgery> surgeries, Caregiver caregiver, List<Exam> exams) {
         this.cpf = cpf;
         this.name = name;
+        this.password = password;
         this.birthday = birthday;
         this.medicines = medicines;
         this.vaccines = vaccines;
@@ -39,15 +41,24 @@ public class Patient {
         this.exams = exams;
     }
 
-    public Patient(String cpf, String name, String birthday, Caregiver caregiver) {
+    public Patient(String cpf, String name, String password, String birthday, Caregiver caregiver) {
         this.cpf = cpf;
         this.name = name;
+        this.password = password;
         this.birthday = birthday;
         this.caregiver = caregiver;
         this.medicines = new ArrayList<>();
         this.vaccines = new ArrayList<>();
         this.surgeries = new ArrayList<>();
         this.exams = new ArrayList<>();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Caregiver getCaregiver() {

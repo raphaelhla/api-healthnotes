@@ -13,13 +13,24 @@ public class CaregiverDTO {
     @Id
     private String cpf;
 
+    private String password;
+
     private String name;
 
     public CaregiverDTO(){}
 
-    public CaregiverDTO(String cpf, String name) {
+    public CaregiverDTO(String cpf, String name, String password) {
         this.cpf = cpf;
         this.name = name;
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getCpf() {

@@ -20,7 +20,7 @@ public class PatientService {
    private CaregiverService caregiverService;
    public Patient savePatient(PatientDTO patientDTO) {
       Caregiver caregiver = this.caregiverService.findCaregiver(patientDTO.getCaregiverCpf());
-      Patient patient = new Patient(patientDTO.getCpf(), patientDTO.getName(), patientDTO.getBirthday(), caregiver);
+      Patient patient = new Patient(patientDTO.getCpf(), patientDTO.getName(), patientDTO.getPassword(), patientDTO.getBirthday(), caregiver);
 
       List<Exam> exams = patientDTO.getExams().stream().map(e -> new Exam(patient, e.getCategory(), e.getDoctor(), e.getDescription()))
               .collect(Collectors.toList());
