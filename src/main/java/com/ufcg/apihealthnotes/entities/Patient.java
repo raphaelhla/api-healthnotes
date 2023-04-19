@@ -13,20 +13,22 @@ public class Patient {
     private String cpf;
     private String name;
     private String birthday;
-    @ElementCollection
-    private List<String> medicines;
-    @ElementCollection
-    private List<String> vaccines;
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<Medicine> medicines;
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<Vaccine> vaccines;
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Surgery> surgeries;
     @ManyToOne
     @JoinColumn(name="caregiverId")
     private Caregiver caregiver;
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Exam> exams;
 
-    public Patient(String cpf, String name, String birthday, List<String> medicines,
-                   List<String> vaccines, List<Surgery> surgeries, Caregiver caregiver, List<Exam> exams) {
+    public Patient(){}
+
+    public Patient(String cpf, String name, String birthday, List<Medicine> medicines,
+                   List<Vaccine> vaccines, List<Surgery> surgeries, Caregiver caregiver, List<Exam> exams) {
         this.cpf = cpf;
         this.name = name;
         this.birthday = birthday;
@@ -88,19 +90,19 @@ public class Patient {
         this.birthday = birthday;
     }
 
-    public List<String> getMedicines() {
+    public List<Medicine> getMedicines() {
         return medicines;
     }
 
-    public void setMedicines(List<String> medicines) {
+    public void setMedicines(List<Medicine> medicines) {
         this.medicines = medicines;
     }
 
-    public List<String> getVaccines() {
+    public List<Vaccine> getVaccines() {
         return vaccines;
     }
 
-    public void setVaccines(List<String> vaccines) {
+    public void setVaccines(List<Vaccine> vaccines) {
         this.vaccines = vaccines;
     }
 

@@ -1,17 +1,6 @@
 package com.ufcg.apihealthnotes.dto;
 
-import com.ufcg.apihealthnotes.entities.Caregiver;
-import com.ufcg.apihealthnotes.entities.Exam;
-import com.ufcg.apihealthnotes.entities.Patient;
-import com.ufcg.apihealthnotes.entities.Surgery;
-
-import javax.persistence.ElementCollection;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class PatientDTO {
 
@@ -19,13 +8,13 @@ public class PatientDTO {
     private String cpf;
     private String name;
     private String birthday;
-    private List<String> medicines;
-    private List<String> vaccines;
+    private List<MedicineDTO> medicines;
+    private List<VaccineDTO> vaccines;
     private List<SurgeryDTO> surgeries;
     private List<ExamDTO> exams;
 
     public PatientDTO(String caregiverCpf, String cpf, String name, String birthday,
-                      List<String> medicines, List<String> vaccines, List<SurgeryDTO> surgeries, List<ExamDTO> exams) {
+                      List<MedicineDTO> medicines, List<VaccineDTO> vaccines, List<SurgeryDTO> surgeries, List<ExamDTO> exams) {
 
         this.caregiverCpf = caregiverCpf;
         this.cpf = cpf;
@@ -69,19 +58,19 @@ public class PatientDTO {
         this.birthday = birthday;
     }
 
-    public List<String> getMedicines() {
+    public List<MedicineDTO> getMedicines() {
         return medicines;
     }
 
-    public void setMedicines(List<String> medicines) {
+    public void setMedicines(List<MedicineDTO> medicines) {
         this.medicines = medicines;
     }
 
-    public List<String> getVaccines() {
+    public List<VaccineDTO> getVaccines() {
         return vaccines;
     }
 
-    public void setVaccines(List<String> vaccines) {
+    public void setVaccines(List<VaccineDTO> vaccines) {
         this.vaccines = vaccines;
     }
 

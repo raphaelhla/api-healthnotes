@@ -15,6 +15,8 @@ public class Surgery {
     private String doctor;
     private String cause;
 
+    public Surgery(){}
+
     public Surgery(Patient patient, String doctor, String cause) {
         this.patient = patient;
         this.doctor = doctor;
