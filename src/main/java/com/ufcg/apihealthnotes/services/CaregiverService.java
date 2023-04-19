@@ -16,4 +16,9 @@ public class CaregiverService {
         Caregiver newCaregiver = new Caregiver(caregiver.getCpf(), caregiver.getName());
         return this.caregiverRepository.save(newCaregiver);
     }
+
+    public Caregiver findCaregiver(String caregiverCpf) {
+        Caregiver caregiver = this.caregiverRepository.findById(caregiverCpf).get();
+        return caregiver;
+    }
 }

@@ -11,7 +11,7 @@ public class SurgeryService {
 
     @Autowired
     private SurgeryRepository surgeryRepository;
-    public Surgery saveSurgery(SurgeryDTO surgeryDTO) {
-
+    public Surgery saveSurgery(Surgery surgery) {
+        return this.surgeryRepository.save(surgery);
     }
 }

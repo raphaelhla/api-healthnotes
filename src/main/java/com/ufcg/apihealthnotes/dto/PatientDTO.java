@@ -21,13 +21,11 @@ public class PatientDTO {
     private String birthday;
     private List<String> medicines;
     private List<String> vaccines;
-    private List<Surgery> surgeries;
-    private Caregiver caregiver;
-    private List<Exam> exams;
+    private List<SurgeryDTO> surgeries;
+    private List<ExamDTO> exams;
 
     public PatientDTO(String caregiverCpf, String cpf, String name, String birthday,
-                      List<String> medicines, List<String> vaccines, List<Surgery> surgeries,
-                      Caregiver caregiver, List<Exam> exams) {
+                      List<String> medicines, List<String> vaccines, List<SurgeryDTO> surgeries, List<ExamDTO> exams) {
 
         this.caregiverCpf = caregiverCpf;
         this.cpf = cpf;
@@ -36,7 +34,6 @@ public class PatientDTO {
         this.medicines = medicines;
         this.vaccines = vaccines;
         this.surgeries = surgeries;
-        this.caregiver = caregiver;
         this.exams = exams;
     }
 
@@ -88,27 +85,19 @@ public class PatientDTO {
         this.vaccines = vaccines;
     }
 
-    public List<Surgery> getSurgeries() {
+    public List<SurgeryDTO> getSurgeries() {
         return surgeries;
     }
 
-    public void setSurgeries(List<Surgery> surgeries) {
+    public void setSurgeries(List<SurgeryDTO> surgeries) {
         this.surgeries = surgeries;
     }
 
-    public Caregiver getCaregiver() {
-        return caregiver;
-    }
-
-    public void setCaregiver(Caregiver caregiver) {
-        this.caregiver = caregiver;
-    }
-
-    public List<Exam> getExams() {
+    public List<ExamDTO> getExams() {
         return exams;
     }
 
-    public void setExams(List<Exam> exams) {
+    public void setExams(List<ExamDTO> exams) {
         this.exams = exams;
     }
 }

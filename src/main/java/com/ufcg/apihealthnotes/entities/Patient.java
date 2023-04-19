@@ -25,14 +25,35 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private List<Exam> exams;
 
-    public Patient(String cpf, String name, String birthday) {
+    public Patient(String cpf, String name, String birthday, List<String> medicines,
+                   List<String> vaccines, List<Surgery> surgeries, Caregiver caregiver, List<Exam> exams) {
         this.cpf = cpf;
         this.name = name;
         this.birthday = birthday;
+        this.medicines = medicines;
+        this.vaccines = vaccines;
+        this.surgeries = surgeries;
+        this.caregiver = caregiver;
+        this.exams = exams;
+    }
+
+    public Patient(String cpf, String name, String birthday, Caregiver caregiver) {
+        this.cpf = cpf;
+        this.name = name;
+        this.birthday = birthday;
+        this.caregiver = caregiver;
         this.medicines = new ArrayList<>();
         this.vaccines = new ArrayList<>();
         this.surgeries = new ArrayList<>();
         this.exams = new ArrayList<>();
+    }
+
+    public Caregiver getCaregiver() {
+        return caregiver;
+    }
+
+    public void setCaregiver(Caregiver caregiver) {
+        this.caregiver = caregiver;
     }
 
     public List<Exam> getExams() {
