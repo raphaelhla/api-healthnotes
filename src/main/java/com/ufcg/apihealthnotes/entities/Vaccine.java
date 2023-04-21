@@ -1,5 +1,7 @@
 package com.ufcg.apihealthnotes.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,6 +12,7 @@ public class Vaccine {
     private Long id;
     @ManyToOne
     @JoinColumn(name="patientId")
+    @JsonIgnore
     private Patient patient;
     private String name;
     private String description;

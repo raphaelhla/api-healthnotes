@@ -1,9 +1,13 @@
 package com.ufcg.apihealthnotes.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ufcg.apihealthnotes.dto.PatientDTO;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tb_patient")
@@ -123,6 +127,31 @@ public class Patient {
 
     public void setSurgeries(List<Surgery> surgeries) {
         this.surgeries = surgeries;
+    }
+
+    public void updateFromDTO(PatientDTO patientDTO) {
+
+        this.name = patientDTO.getName();
+        this.birthday = patientDTO.getBirthday();
+        this.password = patientDTO.getPassword();
+
+        List<Exam> exams = patientDTO.getExams().stream().map(e -> new Exam(this, e.getCategory(), e.getDoctor(), e.getDescription()))
+                .collect(Collectors.toList());
+
+        List<Surgery> surgeries = patientDTO.getSurgeries().stream().map(s -> new Surgery(this, s.getDoctor(), s.getCause()))
+                .collect(Collectors.toList());
+
+        List<Medicine> medicines = patientDTO.getMedicines().stream().map(m -> new Medicine(this, m.getName(), m.getDescription()))
+                .collect(Collectors.toList());
+
+        List<Vaccine> vaccines = patientDTO.getVaccines().stream().map(v -> new Vaccine(this, v.getName(), v.getDescription()))
+                .collect(Collectors.toList());
+
+        this.exams = exams;
+        this.medicines = medicines;
+        this.surgeries = surgeries;
+        this.vaccines = vaccines;
+
     }
 
     @Override

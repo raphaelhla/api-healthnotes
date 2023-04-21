@@ -1,5 +1,8 @@
 package com.ufcg.apihealthnotes.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -17,6 +20,7 @@ public class Caregiver {
     private String password;
 
     @OneToMany(mappedBy="caregiver")
+    @JsonIgnore
     private List<Patient> patients;
 
     public Caregiver(){}
