@@ -1,7 +1,9 @@
 package com.ufcg.apihealthnotes.controllers;
 
-import com.ufcg.apihealthnotes.dto.PatientDTO;
+import com.ufcg.apihealthnotes.dto.*;
+import com.ufcg.apihealthnotes.entities.Medicine;
 import com.ufcg.apihealthnotes.entities.Patient;
+import com.ufcg.apihealthnotes.entities.Vaccine;
 import com.ufcg.apihealthnotes.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,5 +57,43 @@ public class PatientController {
         }
     }
 
+    @PutMapping("/vaccine/{id}")
+    public ResponseEntity addVaccine(@PathVariable String id, @RequestBody VaccineDTO vaccineDTO) {
+        try {
+            patientService.addVaccine(id, vaccineDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 
+    @PutMapping("/medicine/{id}")
+    public ResponseEntity addMedicine(@PathVariable String id, @RequestBody MedicineDTO medicineDTO) {
+        try {
+            patientService.addMedicine(id, medicineDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/exam/{id}")
+    public ResponseEntity addExam(@PathVariable String id, @RequestBody ExamDTO examDTO) {
+        try {
+            patientService.addExam(id, examDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/surgery/{id}")
+    public ResponseEntity addSurgery(@PathVariable String id, @RequestBody SurgeryDTO surgeryDTO) {
+        try {
+            patientService.addSurgery(id, surgeryDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 }

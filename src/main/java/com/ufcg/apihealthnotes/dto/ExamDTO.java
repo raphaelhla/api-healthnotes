@@ -1,11 +1,5 @@
 package com.ufcg.apihealthnotes.dto;
 
-import com.ufcg.apihealthnotes.entities.Exam;
-import com.ufcg.apihealthnotes.entities.Patient;
-
-import javax.persistence.*;
-import java.util.Objects;
-
 public class ExamDTO {
     private String category;
     private String doctor;

@@ -1,6 +1,6 @@
 package com.ufcg.apihealthnotes.services;
 
-import com.ufcg.apihealthnotes.dto.PatientDTO;
+import com.ufcg.apihealthnotes.dto.*;
 import com.ufcg.apihealthnotes.entities.*;
 import com.ufcg.apihealthnotes.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +36,33 @@ public class PatientService {
       patient.updateFromDTO(patientDTO);
       this.patientRepository.save(patient);
       return patient;
+   }
+
+   public void addVaccine(String id, VaccineDTO vaccineDTO) {
+      Patient patient = this.patientRepository.getById(id);
+      Vaccine vaccine = new Vaccine(patient, vaccineDTO.getName(), vaccineDTO.getDescription());
+      patient.getVaccines().add(vaccine);
+      this.patientRepository.save(patient);
+   }
+
+   public void addMedicine(String id, MedicineDTO medicineDTO) {
+      Patient patient = this.patientRepository.getById(id);
+      Medicine medicine  = new Medicine(patient, medicineDTO.getName(), medicineDTO.getDescription());
+      patient.getMedicines().add(medicine);
+      this.patientRepository.save(patient);
+   }
+
+   public void addExam(String id, ExamDTO examDTO) {
+      Patient patient = this.patientRepository.getById(id);
+      Exam exam = new Exam(patient, examDTO.getCategory(), examDTO.getDoctor(), examDTO.getDescription());
+      patient.getExams().add(exam);
+      this.patientRepository.save(patient);
+   }
+
+   public void addSurgery(String id, SurgeryDTO surgeryDTO) {
+      Patient patient = this.patientRepository.getById(id);
+      Surgery surgery = new Surgery(patient, surgeryDTO.getDoctor(), surgeryDTO.getCause());
+      patient.getSurgeries().add(surgery);
+      this.patientRepository.save(patient);
    }
 }
