@@ -1,10 +1,7 @@
 package com.projeto1.apihealthnotes.domain.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +12,7 @@ import java.util.List;
 @Entity(name = "Usuario")
 @Table(name = "TB_USUARIOS")
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -29,6 +27,12 @@ public class Usuario implements UserDetails {
 
     @Column(nullable = false, length = 255)
     private String senha;
+
+    @Column(nullable = false, length = 20)
+    private String nome;
+
+    @Column(nullable = false, length = 20)
+    private String sobrenome;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
