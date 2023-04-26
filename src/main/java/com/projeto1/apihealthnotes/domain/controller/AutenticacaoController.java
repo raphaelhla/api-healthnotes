@@ -49,10 +49,10 @@ public class AutenticacaoController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe uma conta com esse Login: " + dadosCadastro.login());
         }
         Usuario user = new Usuario();
-        user.setNome(dadosCadastro.nome());
-        user.setSobrenome(dadosCadastro.sobrenome());
         user.setLogin(dadosCadastro.login());
         user.setSenha(passwordEncoder.encode(dadosCadastro.senha()));
+        user.setNome(dadosCadastro.nome());
+        user.setSobrenome(dadosCadastro.sobrenome());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(user));
     }
