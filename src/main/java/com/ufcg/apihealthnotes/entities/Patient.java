@@ -1,9 +1,8 @@
 package com.ufcg.apihealthnotes.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ufcg.apihealthnotes.dto.PatientDTO;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,12 +24,13 @@ public class Patient {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Surgery> surgeries;
     @ManyToOne
-    @JoinColumn(name="caregiverId")
+    @JoinColumn(name = "caregiverId")
     private Caregiver caregiver;
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Exam> exams;
 
-    public Patient(){}
+    public Patient() {
+    }
 
     public Patient(String cpf, String name, String password, String birthday, List<Medicine> medicines,
                    List<Vaccine> vaccines, List<Surgery> surgeries, Caregiver caregiver, List<Exam> exams) {

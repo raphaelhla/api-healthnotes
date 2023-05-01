@@ -1,8 +1,7 @@
 package com.ufcg.apihealthnotes.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_medicine")
@@ -11,13 +10,15 @@ public class Medicine {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
-    @JoinColumn(name="patientId")
+    @JoinColumn(name = "patientId")
     @JsonIgnore
     private Patient patient;
     private String name;
     private String description;
 
-    public Medicine(){}
+    public Medicine() {
+    }
+
     public Medicine(Patient patient, String name, String description) {
         this.patient = patient;
         this.name = name;

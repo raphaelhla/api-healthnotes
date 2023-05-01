@@ -1,11 +1,5 @@
 package com.ufcg.apihealthnotes.dto;
 
-import com.ufcg.apihealthnotes.entities.Patient;
-import com.ufcg.apihealthnotes.entities.Surgery;
-
-import javax.persistence.*;
-import java.util.Objects;
-
 public class SurgeryDTO {
     private String doctor;
     private String cause;

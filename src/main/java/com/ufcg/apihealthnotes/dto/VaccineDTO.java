@@ -2,8 +2,6 @@ package com.ufcg.apihealthnotes.dto;
 
 import com.ufcg.apihealthnotes.entities.Patient;
 
-import javax.persistence.*;
-
 public class VaccineDTO {
 
     private Patient patient;

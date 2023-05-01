@@ -1,23 +1,17 @@
 package com.ufcg.apihealthnotes.dto;
 
-import com.ufcg.apihealthnotes.entities.Caregiver;
-import com.ufcg.apihealthnotes.entities.Patient;
-
-import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class CaregiverDTO {
 
-    @Id
     private String cpf;
 
     private String password;
 
     private String name;
 
-    public CaregiverDTO(){}
+    public CaregiverDTO() {
+    }
 
     public CaregiverDTO(String cpf, String name, String password) {
         this.cpf = cpf;
