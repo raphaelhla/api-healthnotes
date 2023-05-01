@@ -57,6 +57,9 @@ public class Patient {
         this.exams = new ArrayList<>();
     }
 
+    public Patient(PatientDTO patientDTO, String cpf) {
+    }
+
     public String getPassword() {
         return password;
     }

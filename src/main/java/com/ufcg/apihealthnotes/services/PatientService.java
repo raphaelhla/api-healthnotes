@@ -4,6 +4,7 @@ import com.ufcg.apihealthnotes.dto.*;
 import com.ufcg.apihealthnotes.entities.*;
 import com.ufcg.apihealthnotes.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public class PatientService {
    @Autowired
    private CaregiverService caregiverService;
    public Patient savePatient(PatientDTO patientDTO) {
-      Caregiver caregiver = this.caregiverService.findCaregiver(patientDTO.getCaregiverCpf());
+      Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
       Patient patient = new Patient(patientDTO.getCpf(), patientDTO.getName(), patientDTO.getPassword(), patientDTO.getBirthday(), caregiver);
       patient.updateFromDTO(patientDTO);
       return patientRepository.save(patient);
@@ -64,5 +66,11 @@ public class PatientService {
       Surgery surgery = new Surgery(patient, surgeryDTO.getDoctor(), surgeryDTO.getCause());
       patient.getSurgeries().add(surgery);
       this.patientRepository.save(patient);
+   }
+
+   public List<Patient> findByCaregiverCpf() {
+      Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      String cpf = caregiver.getCpf();
+      return patientRepository.findByCaregiverCpf(cpf);
    }
 }
