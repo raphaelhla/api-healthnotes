@@ -1,11 +1,11 @@
-package com.projeto1.apihealthnotes.domain.controller;
+package com.ufcg.apihealthnotes.controllers;
 
-import com.projeto1.apihealthnotes.domain.model.Usuario;
-import com.projeto1.apihealthnotes.domain.model.dto.DadosAutenticacaoDto;
-import com.projeto1.apihealthnotes.domain.model.dto.DadosCadastroDto;
-import com.projeto1.apihealthnotes.domain.repository.UsuarioRepository;
-import com.projeto1.apihealthnotes.infra.security.DadosTokenJWT;
-import com.projeto1.apihealthnotes.infra.security.TokenService;
+import com.ufcg.apihealthnotes.entities.User;
+import com.ufcg.apihealthnotes.dto.DataAutenticationDto;
+import com.ufcg.apihealthnotes.dto.DataRegisterDto;
+import com.ufcg.apihealthnotes.repositories.UserRepository;
+import com.ufcg.apihealthnotes.infra.security.TokenJWT;
+import com.ufcg.apihealthnotes.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping
-public class AutenticacaoController {
+public class AutenticationController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private AuthenticationManager manager;
@@ -35,25 +35,25 @@ public class AutenticacaoController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacaoDto dadosAutenticacao) {
+    public ResponseEntity efetuarLogin(@RequestBody @Valid DataAutenticationDto dadosAutenticacao) {
         var authenticationtoken = new UsernamePasswordAuthenticationToken(dadosAutenticacao.login(), dadosAutenticacao.senha());
         var authentication = manager.authenticate(authenticationtoken);
-        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+        var tokenJWT = tokenService.gerarToken((User) authentication.getPrincipal());
 
-        return ResponseEntity.status(HttpStatus.OK).body(new DadosTokenJWT(tokenJWT));
+        return ResponseEntity.status(HttpStatus.OK).body(new TokenJWT(tokenJWT));
     }
 
     @PostMapping("/cadastro")
-    public ResponseEntity efetuarCadastro(@RequestBody @Valid DadosCadastroDto dadosCadastro) {
-        if (usuarioRepository.existsByLogin(dadosCadastro.login())) {
+    public ResponseEntity efetuarCadastro(@RequestBody @Valid DataRegisterDto dadosCadastro) {
+        if (userRepository.existsByLogin(dadosCadastro.login())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe uma conta com esse Login: " + dadosCadastro.login());
         }
-        Usuario user = new Usuario();
+        User user = new User();
         user.setLogin(dadosCadastro.login());
         user.setSenha(passwordEncoder.encode(dadosCadastro.senha()));
         user.setNome(dadosCadastro.nome());
         user.setSobrenome(dadosCadastro.sobrenome());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(user));
     }
 }

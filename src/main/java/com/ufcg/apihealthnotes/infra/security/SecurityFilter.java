@@ -1,6 +1,6 @@
-package com.projeto1.apihealthnotes.infra.security;
+package com.ufcg.apihealthnotes.infra.security;
 
-import com.projeto1.apihealthnotes.domain.repository.UsuarioRepository;
+import com.ufcg.apihealthnotes.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioRepository repository;
+    private UserRepository repository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

@@ -1,4 +1,4 @@
-package com.projeto1.apihealthnotes;
+package com.ufcg.apihealthnotes;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

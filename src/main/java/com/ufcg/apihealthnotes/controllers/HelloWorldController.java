@@ -1,4 +1,4 @@
-package com.projeto1.apihealthnotes.domain.controller;
+package com.ufcg.apihealthnotes.controllers;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.GetMapping;

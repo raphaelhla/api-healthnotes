@@ -1,4 +1,4 @@
-package com.projeto1.apihealthnotes.domain.model;
+package com.ufcg.apihealthnotes.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Usuario implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
