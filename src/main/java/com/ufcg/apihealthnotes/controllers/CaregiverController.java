@@ -49,6 +49,10 @@ public class CaregiverController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe uma conta com esse Login: " + dadosCadastro.login());
         }
 
+        if (!(dadosCadastro.password().equals(dadosCadastro.confirmPassword()))) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Confirme a senha corretamente");
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(caregiverService.saveCaregiver(dadosCadastro));
     }
 }
