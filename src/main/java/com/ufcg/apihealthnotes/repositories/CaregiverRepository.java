@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CaregiverRepository extends JpaRepository<Caregiver, String> {
-    UserDetails findByLogin(String login);
+    UserDetails findByEmail(String email);
 
-    boolean existsByLogin(String login);
+    boolean existsByEmail(String email);
 }

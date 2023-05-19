@@ -23,7 +23,7 @@ public class TokenService {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("API HealthNotes")
-                    .withSubject(caregiver.getLogin())
+                    .withSubject(caregiver.getEmail())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         } catch (JWTCreationException exception) {

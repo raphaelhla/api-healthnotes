@@ -8,19 +8,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PatientService {
 
    @Autowired
    private PatientRepository patientRepository;
+
    @Autowired
    private CaregiverService caregiverService;
+
    public Patient savePatient(PatientDTO patientDTO) {
       Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-      Patient patient = new Patient(patientDTO.getCpf(), patientDTO.getName(), patientDTO.getPassword(), patientDTO.getBirthday(), caregiver);
+      Patient patient = new Patient(patientDTO.getCpf(), patientDTO.getName(), patientDTO.getAge(), caregiver);
       patient.updateFromDTO(patientDTO);
       return patientRepository.save(patient);
    }

@@ -6,34 +6,24 @@ public class PatientDTO {
 
     private String caregiverCpf;
     private String cpf;
-    private String password;
     private String name;
-    private String birthday;
+    private String age;
     private List<MedicineDTO> medicines;
     private List<VaccineDTO> vaccines;
     private List<SurgeryDTO> surgeries;
     private List<ExamDTO> exams;
 
-    public PatientDTO(String caregiverCpf, String cpf, String password, String name, String birthday,
+    public PatientDTO(String caregiverCpf, String cpf, String name, String age,
                       List<MedicineDTO> medicines, List<VaccineDTO> vaccines, List<SurgeryDTO> surgeries, List<ExamDTO> exams) {
 
         this.caregiverCpf = caregiverCpf;
         this.cpf = cpf;
-        this.password = password;
         this.name = name;
-        this.birthday = birthday;
+        this.age = age;
         this.medicines = medicines;
         this.vaccines = vaccines;
         this.surgeries = surgeries;
         this.exams = exams;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getCaregiverCpf() {
@@ -60,12 +50,12 @@ public class PatientDTO {
         this.name = name;
     }
 
-    public String getBirthday() {
-        return birthday;
+    public String getAge() {
+        return age;
     }
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
+    public void setAge(String age) {
+        this.age = age;
     }
 
     public List<MedicineDTO> getMedicines() {

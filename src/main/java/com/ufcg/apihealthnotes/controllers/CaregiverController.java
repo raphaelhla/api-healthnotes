@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping
@@ -36,7 +33,7 @@ public class CaregiverController {
 
     @PostMapping("/login")
     public ResponseEntity efetuarLogin(@RequestBody @Valid DataAutenticationDTO dadosAutenticacao) {
-        var authenticationtoken = new UsernamePasswordAuthenticationToken(dadosAutenticacao.login(), dadosAutenticacao.password());
+        var authenticationtoken = new UsernamePasswordAuthenticationToken(dadosAutenticacao.email(), dadosAutenticacao.password());
         var authentication = manager.authenticate(authenticationtoken);
         var tokenJWT = tokenService.gerarToken((Caregiver) authentication.getPrincipal());
 
@@ -45,12 +42,12 @@ public class CaregiverController {
 
     @PostMapping("/cadastro")
     public ResponseEntity efetuarCadastro(@RequestBody @Valid DataRegisterDTO dadosCadastro) {
-        if (caregiverRepository.existsByLogin(dadosCadastro.login())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Já existe uma conta com esse Login: " + dadosCadastro.login());
+        if (caregiverRepository.existsByEmail(dadosCadastro.email())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("An account with this Login already exists: " + dadosCadastro.email());
         }
 
         if (!(dadosCadastro.password().equals(dadosCadastro.confirmPassword()))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Confirme a senha corretamente");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The passwords do not match!");
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(caregiverService.saveCaregiver(dadosCadastro));

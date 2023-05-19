@@ -8,7 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,15 +18,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "cpf")
-@JsonIgnoreProperties(value = {"cpf", "username", "enabled", "authorities", "login", "password", "accountNonLocked", "credentialsNonExpired", "accountNonExpired"},
-        allowGetters = true)
+@JsonIgnoreProperties(value = {"accountNonLocked", "credentialsNonExpired", "accountNonExpired", "enabled", "authorities", "username"})
 public class Caregiver implements UserDetails {
 
     @Id
     private String cpf;
 
     @Column(nullable = false, length = 255)
-    private String login;
+    private String email;
 
     @Column(nullable = false, length = 255)
     private String password;
@@ -36,18 +34,11 @@ public class Caregiver implements UserDetails {
     private String name;
 
     @Column(nullable = false, length = 20)
-    private String surname;
+    private String lastname;
 
     @OneToMany(mappedBy = "caregiver")
     @JsonIgnore
     private List<Patient> patients;
-
-    public Caregiver(String cpf, String name, String password) {
-        this.cpf = cpf;
-        this.name = name;
-        this.password = password;
-        this.patients = new ArrayList<>();
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -61,7 +52,7 @@ public class Caregiver implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     @Override

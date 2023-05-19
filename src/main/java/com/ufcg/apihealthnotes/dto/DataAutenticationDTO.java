@@ -1,4 +1,4 @@
 package com.ufcg.apihealthnotes.dto;
 
-public record DataAutenticationDTO(String login, String password) {
+public record DataAutenticationDTO(String email, String password) {
 }

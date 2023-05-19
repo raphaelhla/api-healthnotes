@@ -1,5 +1,6 @@
 package com.ufcg.apihealthnotes.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ufcg.apihealthnotes.dto.PatientDTO;
 import jakarta.persistence.*;
 
@@ -14,42 +15,49 @@ public class Patient {
 
     @Id
     private String cpf;
+
+    @Column(nullable = false, length = 255)
     private String name;
-    private String password;
-    private String birthday;
+
+    @Column(nullable = false, length = 3)
+    private String age;
+
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Medicine> medicines;
+
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Vaccine> vaccines;
+
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Surgery> surgeries;
-    @ManyToOne
-    @JoinColumn(name = "caregiverId")
-    private Caregiver caregiver;
+
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Exam> exams;
+
+    @ManyToOne
+    @JoinColumn(name = "caregiverId")
+    @JsonIgnore
+    private Caregiver caregiver;
 
     public Patient() {
     }
 
-    public Patient(String cpf, String name, String password, String birthday, List<Medicine> medicines,
-                   List<Vaccine> vaccines, List<Surgery> surgeries, Caregiver caregiver, List<Exam> exams) {
+    public Patient(String cpf, String name, String age, List<Medicine> medicines,
+                   List<Vaccine> vaccines, List<Surgery> surgeries, List<Exam> exams, Caregiver caregiver) {
         this.cpf = cpf;
         this.name = name;
-        this.password = password;
-        this.birthday = birthday;
+        this.age = age;
         this.medicines = medicines;
         this.vaccines = vaccines;
         this.surgeries = surgeries;
-        this.caregiver = caregiver;
         this.exams = exams;
+        this.caregiver = caregiver;
     }
 
-    public Patient(String cpf, String name, String password, String birthday, Caregiver caregiver) {
+    public Patient(String cpf, String name, String age, Caregiver caregiver) {
         this.cpf = cpf;
         this.name = name;
-        this.password = password;
-        this.birthday = birthday;
+        this.age = age;
         this.caregiver = caregiver;
         this.medicines = new ArrayList<>();
         this.vaccines = new ArrayList<>();
@@ -58,14 +66,6 @@ public class Patient {
     }
 
     public Patient(PatientDTO patientDTO, String cpf) {
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Caregiver getCaregiver() {
@@ -100,12 +100,12 @@ public class Patient {
         this.name = name;
     }
 
-    public String getBirthday() {
-        return birthday;
+    public String getAge() {
+        return age;
     }
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
+    public void setAge(String age) {
+        this.age = age;
     }
 
     public List<Medicine> getMedicines() {
@@ -135,8 +135,7 @@ public class Patient {
     public void updateFromDTO(PatientDTO patientDTO) {
 
         this.name = patientDTO.getName();
-        this.birthday = patientDTO.getBirthday();
-        this.password = patientDTO.getPassword();
+        this.age = patientDTO.getAge();
 
         List<Exam> exams = patientDTO.getExams().stream().map(e -> new Exam(this, e.getCategory(), e.getDoctor(), e.getDescription()))
                 .collect(Collectors.toList());

@@ -18,11 +18,11 @@ public class CaregiverService {
 
     public Caregiver saveCaregiver(DataRegisterDTO dadosCadastro) {
         Caregiver caregiver = new Caregiver();
-        caregiver.setLogin(dadosCadastro.login());
+        caregiver.setEmail(dadosCadastro.email());
         caregiver.setPassword(passwordEncoder.encode(dadosCadastro.password()));
         caregiver.setCpf(dadosCadastro.cpf());
         caregiver.setName(dadosCadastro.name());
-        caregiver.setSurname(dadosCadastro.surname());
+        caregiver.setLastname(dadosCadastro.lastname());
 
         return this.caregiverRepository.save(caregiver);
     }

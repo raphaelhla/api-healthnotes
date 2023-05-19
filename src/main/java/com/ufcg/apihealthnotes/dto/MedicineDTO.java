@@ -4,22 +4,12 @@ import com.ufcg.apihealthnotes.entities.Patient;
 
 public class MedicineDTO {
 
-    private Patient patient;
     private String name;
     private String description;
 
-    public MedicineDTO(Patient patient, String name, String description) {
-        this.patient = patient;
+    public MedicineDTO(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
     }
 
     public String getName() {
