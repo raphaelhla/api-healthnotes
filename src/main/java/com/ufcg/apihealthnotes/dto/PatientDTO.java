@@ -1,28 +1,22 @@
 package com.ufcg.apihealthnotes.dto;
 
+import com.ufcg.apihealthnotes.entities.Caregiver;
+
 import java.util.List;
+import java.util.Set;
 
 public class PatientDTO {
 
-    private String caregiverCpf;
+    //private String caregiverCpf;
     private String cpf;
     private String name;
     private String age;
+    //private Set<Caregiver> caregivers;
 
-    public PatientDTO(String caregiverCpf, String cpf, String name, String age) {
-
-        this.caregiverCpf = caregiverCpf;
+    public PatientDTO(String cpf, String name, String age) {
         this.cpf = cpf;
         this.name = name;
         this.age = age;
-    }
-
-    public String getCaregiverCpf() {
-        return caregiverCpf;
-    }
-
-    public void setCaregiverCpf(String caregiverCpf) {
-        this.caregiverCpf = caregiverCpf;
     }
 
     public String getCpf() {

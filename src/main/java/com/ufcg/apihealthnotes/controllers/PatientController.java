@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/patient")
@@ -36,7 +37,7 @@ public class PatientController {
     @GetMapping
     public ResponseEntity getAllPatients() {
         try {
-            List<Patient> patients = patientService.findByCaregiverCpf();
+            Set<Patient> patients = patientService.findByCaregivers();
             return new ResponseEntity<>(patients, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);

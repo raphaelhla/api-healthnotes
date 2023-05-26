@@ -2,12 +2,16 @@ package com.ufcg.apihealthnotes.services;
 
 import com.ufcg.apihealthnotes.dto.*;
 import com.ufcg.apihealthnotes.entities.*;
+import com.ufcg.apihealthnotes.repositories.CaregiverRepository;
 import com.ufcg.apihealthnotes.repositories.PatientRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PatientService {
@@ -15,9 +19,22 @@ public class PatientService {
    @Autowired
    private PatientRepository patientRepository;
 
+   @Autowired
+   private CaregiverRepository caregiverRepository;
+
+   @Transactional
    public Patient savePatient(PatientDTO patientDTO) {
       Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      Patient patient = new Patient(patientDTO.getCpf(), patientDTO.getName(), patientDTO.getAge(), caregiver);
+      Patient patient;
+
+          if(patientRepository.existsById(patientDTO.getCpf())){
+             patient = patientRepository.findById(patientDTO.getCpf()).orElse(null);
+          } else {
+             patient = new Patient(patientDTO.getCpf(), patientDTO.getName(), patientDTO.getAge());
+          }
+
+      patient.getCaregivers().add(caregiver);
+
       return patientRepository.save(patient);
    }
 
@@ -26,7 +43,11 @@ public class PatientService {
    }
 
    public void deletePatient(String cpf) {
-      this.patientRepository.deleteById(cpf);
+      Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      Patient patient = patientRepository.findById(cpf).orElse(null);
+
+      patient.getCaregivers().remove(caregiver);
+      patientRepository.save(patient);
    }
 
    public Patient updatePatient(PatientDTO patientDTO) {
@@ -67,9 +88,9 @@ public class PatientService {
       this.patientRepository.save(patient);
    }
 
-   public List<Patient> findByCaregiverCpf() {
+   public Set<Patient> findByCaregivers() {
       Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      String cpf = caregiver.getCpf();
-      return patientRepository.findByCaregiverCpf(cpf);
+
+      return patientRepository.findByCaregivers(caregiver);
    }
 }

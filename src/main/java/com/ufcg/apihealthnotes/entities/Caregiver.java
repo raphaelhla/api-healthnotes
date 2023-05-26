@@ -8,8 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_caregiver")
@@ -36,9 +35,9 @@ public class Caregiver implements UserDetails {
     @Column(nullable = false, length = 20)
     private String lastname;
 
-    @OneToMany(mappedBy = "caregiver")
     @JsonIgnore
-    private List<Patient> patients;
+    @ManyToMany(mappedBy = "caregivers", fetch = FetchType.EAGER)
+    private Set<Patient> patients = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
