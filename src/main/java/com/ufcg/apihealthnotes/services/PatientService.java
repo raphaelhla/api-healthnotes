@@ -15,14 +15,9 @@ public class PatientService {
    @Autowired
    private PatientRepository patientRepository;
 
-   @Autowired
-   private CaregiverService caregiverService;
-
    public Patient savePatient(PatientDTO patientDTO) {
       Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
       Patient patient = new Patient(patientDTO.getCpf(), patientDTO.getName(), patientDTO.getAge(), caregiver);
-      patient.updateFromDTO(patientDTO);
       return patientRepository.save(patient);
    }
 
@@ -36,9 +31,12 @@ public class PatientService {
 
    public Patient updatePatient(PatientDTO patientDTO) {
       Patient patient = this.patientRepository.getById(patientDTO.getCpf());
-      patient.updateFromDTO(patientDTO);
-      this.patientRepository.save(patient);
-      return patient;
+
+      patient.setAge(patientDTO.getAge());
+      patient.setCpf(patientDTO.getCpf());
+      patient.setName(patientDTO.getName());
+      return patientRepository.save(patient);
+
    }
 
    public void addVaccine(String id, VaccineDTO vaccineDTO) {
