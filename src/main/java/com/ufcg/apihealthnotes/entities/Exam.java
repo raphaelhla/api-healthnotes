@@ -20,8 +20,7 @@ public class Exam {
     private String doctor;
     private String description;
 
-    public Exam() {
-    }
+    public Exam() {}
 
     public Exam(Patient patient, String category, String doctor, String description) {
         this.patient = patient;

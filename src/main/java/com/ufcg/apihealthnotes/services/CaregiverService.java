@@ -1,6 +1,6 @@
 package com.ufcg.apihealthnotes.services;
 
-import com.ufcg.apihealthnotes.dto.DataRegisterDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverRegisterDTO;
 import com.ufcg.apihealthnotes.entities.Caregiver;
 import com.ufcg.apihealthnotes.repositories.CaregiverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class CaregiverService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Caregiver saveCaregiver(DataRegisterDTO dadosCadastro) {
+    public Caregiver saveCaregiver(CaregiverRegisterDTO dadosCadastro) {
         Caregiver caregiver = new Caregiver();
         caregiver.setEmail(dadosCadastro.email());
         caregiver.setPassword(passwordEncoder.encode(dadosCadastro.password()));

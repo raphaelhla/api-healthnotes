@@ -6,12 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 public class PatientDTO {
-
-    //private String caregiverCpf;
     private String cpf;
     private String name;
     private String age;
-    //private Set<Caregiver> caregivers;
 
     public PatientDTO(String cpf, String name, String age) {
         this.cpf = cpf;

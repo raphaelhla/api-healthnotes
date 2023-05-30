@@ -102,4 +102,14 @@ public class PatientController {
             return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/schedule/{id}")
+    public ResponseEntity<?> addSchedule(@PathVariable String id, @RequestBody ScheduleDTO scheduleDTO) {
+        try {
+            patientService.addSchedule(id, scheduleDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 }

@@ -1,8 +1,8 @@
 package com.ufcg.apihealthnotes.controllers;
 
 import com.ufcg.apihealthnotes.entities.Caregiver;
-import com.ufcg.apihealthnotes.dto.DataAutenticationDTO;
-import com.ufcg.apihealthnotes.dto.DataRegisterDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverAutenticationDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverRegisterDTO;
 import com.ufcg.apihealthnotes.infra.security.TokenJWT;
 import com.ufcg.apihealthnotes.infra.security.TokenService;
 import com.ufcg.apihealthnotes.repositories.CaregiverRepository;
@@ -32,7 +32,7 @@ public class CaregiverController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity efetuarLogin(@RequestBody @Valid DataAutenticationDTO dadosAutenticacao) {
+    public ResponseEntity efetuarLogin(@RequestBody @Valid CaregiverAutenticationDTO dadosAutenticacao) {
         var authenticationtoken = new UsernamePasswordAuthenticationToken(dadosAutenticacao.email(), dadosAutenticacao.password());
         var authentication = manager.authenticate(authenticationtoken);
         var tokenJWT = tokenService.gerarToken((Caregiver) authentication.getPrincipal());
@@ -41,7 +41,7 @@ public class CaregiverController {
     }
 
     @PostMapping("/cadastro")
-    public ResponseEntity efetuarCadastro(@RequestBody @Valid DataRegisterDTO dadosCadastro) {
+    public ResponseEntity efetuarCadastro(@RequestBody @Valid CaregiverRegisterDTO dadosCadastro) {
         if (caregiverRepository.existsByEmail(dadosCadastro.email())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("An account with this Login already exists: " + dadosCadastro.email());
         }

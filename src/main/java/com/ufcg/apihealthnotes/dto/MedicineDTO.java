@@ -3,7 +3,6 @@ package com.ufcg.apihealthnotes.dto;
 import com.ufcg.apihealthnotes.entities.Patient;
 
 public class MedicineDTO {
-
     private String name;
     private String description;
 

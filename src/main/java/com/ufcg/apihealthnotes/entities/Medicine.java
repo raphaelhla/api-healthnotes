@@ -16,8 +16,7 @@ public class Medicine {
     private String name;
     private String description;
 
-    public Medicine() {
-    }
+    public Medicine() {}
 
     public Medicine(Patient patient, String name, String description) {
         this.patient = patient;

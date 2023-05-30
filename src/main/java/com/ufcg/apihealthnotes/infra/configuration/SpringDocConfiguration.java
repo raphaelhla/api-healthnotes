@@ -1,4 +1,4 @@
-package com.ufcg.apihealthnotes.infra.springdoc;
+package com.ufcg.apihealthnotes.infra.configuration;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
