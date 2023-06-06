@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/patient")
 @SecurityRequirement(name = "bearer-key")
 public class PatientController {
