@@ -38,6 +38,9 @@ public class Caregiver implements UserDetails {
     @Column(nullable = false, length = 20)
     private String lastname;
 
+    @OneToMany(mappedBy = "caregiver", cascade = CascadeType.ALL)
+    private List<Calendar> calendar;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "caregivers", fetch = FetchType.EAGER)
     private Set<Patient> patients = new HashSet<>();

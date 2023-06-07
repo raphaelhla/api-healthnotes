@@ -5,6 +5,7 @@ import com.ufcg.apihealthnotes.dto.PatientDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,8 +35,7 @@ public class Patient {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<ComplexProcedures> complexProcedures;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Calendar> calendar;
+
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)

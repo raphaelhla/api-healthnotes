@@ -1,6 +1,9 @@
 package com.ufcg.apihealthnotes.services;
 
-import com.ufcg.apihealthnotes.dto.*;
+import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
+import com.ufcg.apihealthnotes.dto.ComplexpRroceduresDTO;
+import com.ufcg.apihealthnotes.dto.PatientDTO;
+import com.ufcg.apihealthnotes.dto.ScheduleDTO;
 import com.ufcg.apihealthnotes.entities.*;
 import com.ufcg.apihealthnotes.repositories.CaregiverRepository;
 import com.ufcg.apihealthnotes.repositories.PatientRepository;
@@ -79,11 +82,12 @@ public class PatientService {
     }
 
     public void addSchedule(String id, ScheduleDTO scheduleDTO) {
-        Patient patient = this.patientRepository.getById(id);
+        Patient patient = patientRepository.getById(id);
+        Caregiver caregiver = caregiverRepository.getById(id);
 
         boolean dateFound = false;
 
-        for (Calendar calendar : patient.getCalendar()) {
+        for (Calendar calendar : caregiver.getCalendar()) {
             LocalDate date = calendar.getDate();
 
             if (date.equals(scheduleDTO.date())) {
@@ -95,12 +99,12 @@ public class PatientService {
         }
 
         if (!dateFound) {
-            Calendar calendar = new Calendar(patient, scheduleDTO.date());
+            Calendar calendar = new Calendar(caregiver, scheduleDTO.date());
             var schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category());
             calendar.getSchedules().add(schedule);
-            patient.getCalendar().add(calendar);
+            caregiver.getCalendar().add(calendar);
         }
-        patientRepository.save(patient);
+        caregiverRepository.save(caregiver);
     }
 
     public Patient findByCpf(String cpf) {

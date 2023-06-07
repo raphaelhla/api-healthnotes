@@ -1,11 +1,9 @@
 package com.ufcg.apihealthnotes.dto;
 
-import com.ufcg.apihealthnotes.entities.Caregiver;
 import com.ufcg.apihealthnotes.entities.Comorbidities;
 import com.ufcg.apihealthnotes.entities.ComplexProcedures;
 
 import java.util.List;
-import java.util.Set;
 
 public class PatientDTO {
     private String cpf;

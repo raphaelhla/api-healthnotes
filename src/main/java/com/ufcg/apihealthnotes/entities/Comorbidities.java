@@ -11,12 +11,13 @@ public class Comorbidities {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
-    @JoinColumn(name="patientId")
+    @JoinColumn(name = "patientId")
     @JsonIgnore
     private Patient patient;
     private String description;
 
-    public Comorbidities(){}
+    public Comorbidities() {
+    }
 
     public Comorbidities(Patient patient, String description) {
         this.patient = patient;

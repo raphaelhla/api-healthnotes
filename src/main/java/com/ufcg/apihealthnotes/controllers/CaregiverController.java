@@ -1,8 +1,8 @@
 package com.ufcg.apihealthnotes.controllers;
 
-import com.ufcg.apihealthnotes.entities.Caregiver;
 import com.ufcg.apihealthnotes.dto.CaregiverAutenticationDTO;
 import com.ufcg.apihealthnotes.dto.CaregiverRegisterDTO;
+import com.ufcg.apihealthnotes.entities.Caregiver;
 import com.ufcg.apihealthnotes.infra.security.TokenJWT;
 import com.ufcg.apihealthnotes.infra.security.TokenService;
 import com.ufcg.apihealthnotes.repositories.CaregiverRepository;
@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,7 +33,7 @@ public class CaregiverController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity efetuarLogin(@RequestBody @Valid CaregiverAutenticationDTO dadosAutenticacao) {
+    public ResponseEntity<?> efetuarLogin(@RequestBody @Valid CaregiverAutenticationDTO dadosAutenticacao) {
         var authenticationtoken = new UsernamePasswordAuthenticationToken(dadosAutenticacao.email(), dadosAutenticacao.password());
         var authentication = manager.authenticate(authenticationtoken);
         var caregiver = (Caregiver) authentication.getPrincipal();
@@ -44,11 +43,10 @@ public class CaregiverController {
     }
 
     @PostMapping("/cadastro")
-    public ResponseEntity efetuarCadastro(@RequestBody @Valid CaregiverRegisterDTO dadosCadastro) {
+    public ResponseEntity<?> efetuarCadastro(@RequestBody @Valid CaregiverRegisterDTO dadosCadastro) {
         if (caregiverRepository.existsByEmail(dadosCadastro.email())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("An account with this Login already exists: " + dadosCadastro.email());
         }
-
         if (!(dadosCadastro.password().equals(dadosCadastro.confirmPassword()))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The passwords do not match!");
         }
