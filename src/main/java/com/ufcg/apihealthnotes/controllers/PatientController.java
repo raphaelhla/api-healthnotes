@@ -45,6 +45,16 @@ public class PatientController {
         }
     }
 
+    @GetMapping("/{cpf}")
+    public ResponseEntity getPatientByCpf(@PathVariable String cpf) {
+        try {
+            Patient patient = patientService.findByCpf(cpf);
+            return new ResponseEntity<>(patient, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @DeleteMapping(value = "/{cpf}")
     public ResponseEntity deletePatient(@PathVariable String cpf) {
         try {

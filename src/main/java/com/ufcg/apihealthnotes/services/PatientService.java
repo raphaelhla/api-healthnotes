@@ -116,4 +116,8 @@ public class PatientService {
         }
         patientRepository.save(patient);
     }
+
+    public Patient findByCpf(String cpf) {
+        return this.patientRepository.findById(cpf).orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado"));
+    }
 }
