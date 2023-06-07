@@ -1,12 +1,14 @@
 package com.ufcg.apihealthnotes.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ufcg.apihealthnotes.dto.PatientDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tb_patient")
@@ -27,16 +29,10 @@ public class Patient {
     private String age;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Medicine> medicines;
+    private List<Comorbidities> comorbidities;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Vaccine> vaccines;
-
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Surgery> surgeries;
-
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Exam> exams;
+    private List<ComplexProcedures> complexProcedures;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Calendar> calendar;
@@ -53,4 +49,22 @@ public class Patient {
         this.name = name;
         this.age = age;
     }
+
+    public void updateFromDTO(PatientDTO patientDTO) {
+
+        this.name = patientDTO.getName();
+
+        List<Comorbidities> comorbidities = patientDTO.getComorbidities().stream()
+                .map(e -> new Comorbidities(this, e.getDescription()))
+                .collect(Collectors.toList());
+
+        List<ComplexProcedures> complexProcedures = patientDTO.getComplexProcedures().stream()
+                .map(s -> new ComplexProcedures(this, s.getDescription()))
+                .collect(Collectors.toList());
+
+        this.comorbidities = comorbidities;
+        this.complexProcedures = complexProcedures;
+
+    }
+
 }

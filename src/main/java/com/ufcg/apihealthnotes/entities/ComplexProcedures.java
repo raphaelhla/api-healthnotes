@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tb_medicine")
-public class Medicine {
+@Table(name = "tb_complexprocedures")
+public class ComplexProcedures {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -13,14 +13,17 @@ public class Medicine {
     @JoinColumn(name = "patientId")
     @JsonIgnore
     private Patient patient;
-    private String name;
     private String description;
 
-    public Medicine() {}
+    public ComplexProcedures() {
+    }
 
-    public Medicine(Patient patient, String name, String description) {
+    public ComplexProcedures(Patient patient) {
         this.patient = patient;
-        this.name = name;
+    }
+
+    public ComplexProcedures(Patient patient, String description) {
+        this.patient = patient;
         this.description = description;
     }
 
@@ -38,14 +41,6 @@ public class Medicine {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {

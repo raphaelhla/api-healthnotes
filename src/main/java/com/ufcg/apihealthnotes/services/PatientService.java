@@ -10,7 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -30,8 +29,10 @@ public class PatientService {
 
         if (patientRepository.existsById(patientDTO.getCpf())) {
             patient = patientRepository.findById(patientDTO.getCpf()).orElse(null);
+            patient.updateFromDTO(patientDTO);
         } else {
             patient = new Patient(patientDTO.getCpf(), patientDTO.getName(), patientDTO.getAge());
+            patient.updateFromDTO(patientDTO);
         }
 
         patient.getCaregivers().add(caregiver);
@@ -56,34 +57,19 @@ public class PatientService {
         patient.setCpf(patientDTO.getCpf());
         patient.setName(patientDTO.getName());
         return patientRepository.save(patient);
-
     }
 
-    public void addVaccine(String id, VaccineDTO vaccineDTO) {
+    public void addComplexProcedures(String id, ComplexpRroceduresDTO complexpRroceduresDTO) {
         Patient patient = this.patientRepository.getById(id);
-        Vaccine vaccine = new Vaccine(patient, vaccineDTO.getName(), vaccineDTO.getDescription());
-        patient.getVaccines().add(vaccine);
+        ComplexProcedures complexProcedures = new ComplexProcedures(patient, complexpRroceduresDTO.description());
+        patient.getComplexProcedures().add(complexProcedures);
         this.patientRepository.save(patient);
     }
 
-    public void addMedicine(String id, MedicineDTO medicineDTO) {
+    public void addComorbidities(String id, ComorbiditiesDTO comorbiditiesDTO) {
         Patient patient = this.patientRepository.getById(id);
-        Medicine medicine = new Medicine(patient, medicineDTO.getName(), medicineDTO.getDescription());
-        patient.getMedicines().add(medicine);
-        this.patientRepository.save(patient);
-    }
-
-    public void addExam(String id, ExamDTO examDTO) {
-        Patient patient = this.patientRepository.getById(id);
-        Exam exam = new Exam(patient, examDTO.getCategory(), examDTO.getDoctor(), examDTO.getDescription());
-        patient.getExams().add(exam);
-        this.patientRepository.save(patient);
-    }
-
-    public void addSurgery(String id, SurgeryDTO surgeryDTO) {
-        Patient patient = this.patientRepository.getById(id);
-        Surgery surgery = new Surgery(patient, surgeryDTO.getDoctor(), surgeryDTO.getCause());
-        patient.getSurgeries().add(surgery);
+        Comorbidities comorbidities = new Comorbidities(patient, comorbiditiesDTO.description());
+        patient.getComorbidities().add(comorbidities);
         this.patientRepository.save(patient);
     }
 

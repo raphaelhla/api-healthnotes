@@ -1,19 +1,15 @@
 package com.ufcg.apihealthnotes.controllers;
 
 import com.ufcg.apihealthnotes.dto.*;
-import com.ufcg.apihealthnotes.entities.Caregiver;
-import com.ufcg.apihealthnotes.entities.Medicine;
+import com.ufcg.apihealthnotes.entities.Comorbidities;
 import com.ufcg.apihealthnotes.entities.Patient;
-import com.ufcg.apihealthnotes.entities.Vaccine;
 import com.ufcg.apihealthnotes.services.PatientService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -31,7 +27,7 @@ public class PatientController {
             patientService.savePatient(patientDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -41,7 +37,7 @@ public class PatientController {
             Set<Patient> patients = patientService.findByCaregivers();
             return new ResponseEntity<>(patients, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -51,7 +47,7 @@ public class PatientController {
             Patient patient = patientService.findByCpf(cpf);
             return new ResponseEntity<>(patient, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -61,58 +57,40 @@ public class PatientController {
             patientService.deletePatient(cpf);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PutMapping
     public ResponseEntity updatePatient(@RequestBody PatientDTO patientDTO) {
         try {
             Patient patient = patientService.updatePatient(patientDTO);
             return new ResponseEntity<>(patient, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/vaccine/{id}")
-    public ResponseEntity addVaccine(@PathVariable String id, @RequestBody VaccineDTO vaccineDTO) {
+    @PutMapping("/comorbidities/{id}")
+    public ResponseEntity addComorbidities(@PathVariable String id, @RequestBody ComorbiditiesDTO comorbiditiesDTO) {
         try {
-            patientService.addVaccine(id, vaccineDTO);
+            patientService.addComorbidities(id, comorbiditiesDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/medicine/{id}")
-    public ResponseEntity addMedicine(@PathVariable String id, @RequestBody MedicineDTO medicineDTO) {
+    @PutMapping("/complexprocedures/{id}")
+    public ResponseEntity addComplexProcedures(@PathVariable String id, @RequestBody ComplexpRroceduresDTO complexpRroceduresDTO) {
         try {
-            patientService.addMedicine(id, medicineDTO);
+            patientService.addComplexProcedures(id, complexpRroceduresDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/exam/{id}")
-    public ResponseEntity addExam(@PathVariable String id, @RequestBody ExamDTO examDTO) {
-        try {
-            patientService.addExam(id, examDTO);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PutMapping("/surgery/{id}")
-    public ResponseEntity addSurgery(@PathVariable String id, @RequestBody SurgeryDTO surgeryDTO) {
-        try {
-            patientService.addSurgery(id, surgeryDTO);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @PutMapping("/schedule/{id}")
     public ResponseEntity<?> addSchedule(@PathVariable String id, @RequestBody ScheduleDTO scheduleDTO) {
@@ -120,7 +98,7 @@ public class PatientController {
             patientService.addSchedule(id, scheduleDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

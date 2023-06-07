@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tb_vaccine")
-public class Vaccine {
+@Table(name = "tb_comorbidities")
+public class Comorbidities {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -13,23 +14,17 @@ public class Vaccine {
     @JoinColumn(name="patientId")
     @JsonIgnore
     private Patient patient;
-    private String name;
     private String description;
 
-    public Vaccine(){}
+    public Comorbidities(){}
 
-    public Vaccine(Patient patient, String name, String description) {
+    public Comorbidities(Patient patient, String description) {
         this.patient = patient;
-        this.name = name;
         this.description = description;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public Comorbidities(Patient patient) {
+        this.patient = patient;
     }
 
     public Patient getPatient() {
@@ -40,12 +35,12 @@ public class Vaccine {
         this.patient = patient;
     }
 
-    public String getName() {
-        return name;
+    public Long getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDescription() {
@@ -55,5 +50,4 @@ public class Vaccine {
     public void setDescription(String description) {
         this.description = description;
     }
-
 }
