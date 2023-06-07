@@ -27,8 +27,7 @@ public class CaregiverService {
         return this.caregiverRepository.save(caregiver);
     }
 
-    public Caregiver findCaregiver(String caregiverCpf) {
-        Caregiver caregiver = this.caregiverRepository.findById(caregiverCpf).get();
-        return caregiver;
+    public Caregiver findCaregiver(String id) {
+        return this.caregiverRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cuidador não encontrado"));
     }
 }

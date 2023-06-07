@@ -53,4 +53,14 @@ public class CaregiverController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(caregiverService.saveCaregiver(dadosCadastro));
     }
+
+    @GetMapping("/caregiver/{id}")
+    public ResponseEntity<?> findCaregiver(@PathVariable String id) {
+        try {
+            Caregiver caregiver = caregiverService.findCaregiver(id);
+            return new ResponseEntity<>(caregiver, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 }

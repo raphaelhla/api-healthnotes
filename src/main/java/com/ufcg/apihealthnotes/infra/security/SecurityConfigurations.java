@@ -40,6 +40,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/cadastro").permitAll()
+                .requestMatchers(HttpMethod.GET, "/caregiver/{id}").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "swagger-ui/**").permitAll()
                 .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
                 .anyRequest().authenticated()
