@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,9 +37,10 @@ public class CaregiverController {
     public ResponseEntity efetuarLogin(@RequestBody @Valid CaregiverAutenticationDTO dadosAutenticacao) {
         var authenticationtoken = new UsernamePasswordAuthenticationToken(dadosAutenticacao.email(), dadosAutenticacao.password());
         var authentication = manager.authenticate(authenticationtoken);
-        var tokenJWT = tokenService.gerarToken((Caregiver) authentication.getPrincipal());
+        var caregiver = (Caregiver) authentication.getPrincipal();
+        var tokenJWT = tokenService.gerarToken(caregiver);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new TokenJWT(tokenJWT));
+        return ResponseEntity.status(HttpStatus.OK).body(new TokenJWT(tokenJWT, caregiver.getName(), caregiver.getCpf()));
     }
 
     @PostMapping("/cadastro")
