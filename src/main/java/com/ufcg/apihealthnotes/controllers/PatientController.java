@@ -1,5 +1,6 @@
 package com.ufcg.apihealthnotes.controllers;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
 import com.ufcg.apihealthnotes.dto.ComplexProceduresDTO;
 import com.ufcg.apihealthnotes.dto.PatientDTO;
 import com.ufcg.apihealthnotes.dto.ScheduleDTO;
+import com.ufcg.apihealthnotes.entities.Calendar;
 import com.ufcg.apihealthnotes.entities.Patient;
 import com.ufcg.apihealthnotes.services.PatientService;
 
@@ -103,11 +105,21 @@ public class PatientController {
         }
     }
 
-    @PutMapping("/schedule/{cpfPatient}")
+    @PutMapping("/{cpfPatient}/schedule")
     public ResponseEntity<?> addSchedule(@PathVariable String cpfPatient, @RequestBody ScheduleDTO scheduleDTO) {
         try {
             patientService.addSchedule(cpfPatient, scheduleDTO);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @GetMapping("/{cpfPatient}/calendar")
+    public ResponseEntity<?> getCalendar(@PathVariable String cpfPatient) {
+        try {
+        	List<Calendar> calendar = patientService.getCalendar(cpfPatient);
+            return new ResponseEntity<>(calendar, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

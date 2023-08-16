@@ -42,7 +42,6 @@ public class Schedule {
 
     @ManyToOne
 	@JoinColumn(name = "caregiverId")
-	@JsonIgnore    
     private Caregiver caregiver;
 
     public Schedule() {

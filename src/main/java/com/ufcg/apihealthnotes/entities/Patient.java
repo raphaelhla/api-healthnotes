@@ -67,12 +67,6 @@ public class Patient implements Serializable{
     private Set<Caregiver> caregivers = new HashSet<>();
 
     public Patient(PatientDTO patientDTO) {
-    	this.cpf = patientDTO.getCpf();
-		this.calendar = new HashMap<>();
-		updateFromDTO(patientDTO);
-    }
-
-    public void updateFromDTO(PatientDTO patientDTO) {
         List<Comorbiditie> comorbidities = patientDTO.getComorbidities().stream()
                 .map(e -> new Comorbiditie(this, e.getDescription()))
                 .collect(Collectors.toList());
@@ -80,11 +74,29 @@ public class Patient implements Serializable{
         List<ComplexProcedure> complexProcedures = patientDTO.getComplexProcedures().stream()
                 .map(s -> new ComplexProcedure(this, s.getDescription()))
                 .collect(Collectors.toList());
+        
+        this.cpf = patientDTO.getCpf();
+        this.name = patientDTO.getName();
+        this.age = patientDTO.getAge();
+		this.calendar = new HashMap<>();
+        this.comorbidities = comorbidities;
+        this.complexProcedures = complexProcedures;
+//		updateFromDTO(patientDTO);
+    }
+
+    public void updateFromDTO(PatientDTO patientDTO) {
+//        List<Comorbiditie> comorbidities = patientDTO.getComorbidities().stream()
+//                .map(e -> new Comorbiditie(this, e.getDescription()))
+//                .collect(Collectors.toList());
+//
+//        List<ComplexProcedure> complexProcedures = patientDTO.getComplexProcedures().stream()
+//                .map(s -> new ComplexProcedure(this, s.getDescription()))
+//                .collect(Collectors.toList());
 
         this.name = patientDTO.getName();
         this.age = patientDTO.getAge();
-        this.comorbidities = comorbidities;
-        this.complexProcedures = complexProcedures;
+        this.comorbidities = patientDTO.getComorbidities();
+        this.complexProcedures = patientDTO.getComplexProcedures();
     }
 
 	public void addComplexProcedure(ComplexProcedure complexProcedure) {
