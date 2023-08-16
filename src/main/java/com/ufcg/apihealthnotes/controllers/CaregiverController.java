@@ -1,64 +1,40 @@
 package com.ufcg.apihealthnotes.controllers;
 
-import com.ufcg.apihealthnotes.dto.CaregiverAutenticationDTO;
-import com.ufcg.apihealthnotes.dto.CaregiverRegisterDTO;
-import com.ufcg.apihealthnotes.entities.Caregiver;
-import com.ufcg.apihealthnotes.infra.security.TokenJWT;
-import com.ufcg.apihealthnotes.infra.security.TokenService;
-import com.ufcg.apihealthnotes.repositories.CaregiverRepository;
-import com.ufcg.apihealthnotes.services.CaregiverService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ufcg.apihealthnotes.entities.Caregiver;
+import com.ufcg.apihealthnotes.services.CaregiverService;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping
+@RequestMapping("/caregiver")
+@SecurityRequirement(name = "bearer-key")
 public class CaregiverController {
 
     @Autowired
     private CaregiverService caregiverService;
 
-    @Autowired
-    private CaregiverRepository caregiverRepository;
-
-    @Autowired
-    private AuthenticationManager manager;
-
-    @Autowired
-    private TokenService tokenService;
-
-    @PostMapping("/login")
-    public ResponseEntity<?> efetuarLogin(@RequestBody @Valid CaregiverAutenticationDTO dadosAutenticacao) {
-        var authenticationtoken = new UsernamePasswordAuthenticationToken(dadosAutenticacao.email(), dadosAutenticacao.password());
-        var authentication = manager.authenticate(authenticationtoken);
-        var caregiver = (Caregiver) authentication.getPrincipal();
-        var tokenJWT = tokenService.gerarToken(caregiver);
-
-        return ResponseEntity.status(HttpStatus.OK).body(new TokenJWT(tokenJWT, caregiver.getName(), caregiver.getCpf()));
+    @GetMapping("/{cpf}")
+    public ResponseEntity<?> getCaregiver(@PathVariable String cpf) {
+            Caregiver caregiver = caregiverService.getCaregiver(cpf);
+            return new ResponseEntity<>(caregiver, HttpStatus.OK);
     }
-
-    @PostMapping("/cadastro")
-    public ResponseEntity<?> efetuarCadastro(@RequestBody @Valid CaregiverRegisterDTO dadosCadastro) {
-        if (caregiverRepository.existsByEmail(dadosCadastro.email())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("An account with this Login already exists: " + dadosCadastro.email());
-        }
-        if (!(dadosCadastro.password().equals(dadosCadastro.confirmPassword()))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The passwords do not match!");
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(caregiverService.saveCaregiver(dadosCadastro));
-    }
-
-    @GetMapping("/caregiver/{id}")
-    public ResponseEntity<?> findCaregiver(@PathVariable String id) {
+    
+    @PutMapping("/{caregiverCpf}/patient/{patientCpf}")
+    public ResponseEntity<?> pararDeAcompanharPaciente(@PathVariable String caregiverCpf, @PathVariable String patientCpf) {
         try {
-            Caregiver caregiver = caregiverService.findCaregiver(id);
-            return new ResponseEntity<>(caregiver, HttpStatus.CREATED);
+            caregiverService.pararDeAcompanharPaciente(caregiverCpf, patientCpf);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }

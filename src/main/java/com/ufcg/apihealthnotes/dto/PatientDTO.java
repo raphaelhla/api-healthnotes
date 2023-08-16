@@ -1,23 +1,38 @@
 package com.ufcg.apihealthnotes.dto;
 
-import com.ufcg.apihealthnotes.entities.Comorbidities;
-import com.ufcg.apihealthnotes.entities.ComplexProcedures;
-
+import java.util.ArrayList;
 import java.util.List;
+
+import com.ufcg.apihealthnotes.entities.Comorbiditie;
+import com.ufcg.apihealthnotes.entities.ComplexProcedure;
+
 
 public class PatientDTO {
     private String cpf;
     private String name;
     private String age;
-    private List<Comorbidities> comorbidities;
-    private List<ComplexProcedures> complexProcedures;
+    private List<Comorbiditie> comorbidities;
+    private List<ComplexProcedure> complexProcedures;
 
-    public PatientDTO(String cpf, String name, String age, List<Comorbidities> comorbidities, List<ComplexProcedures> complexProcedures) {
+    public PatientDTO() {
+    	this.comorbidities = new ArrayList<>();
+        this.complexProcedures = new ArrayList<>();
+    }
+    
+    public PatientDTO(String cpf, String name, String age, List<Comorbiditie> comorbidities, List<ComplexProcedure> complexProcedures) {
         this.cpf = cpf;
         this.name = name;
         this.age = age;
         this.comorbidities = comorbidities;
         this.complexProcedures = complexProcedures;
+    }
+    
+    public PatientDTO(String cpf, String name, String age) {
+        this.cpf = cpf;
+        this.name = name;
+        this.age = age;
+        this.comorbidities = new ArrayList<>();
+        this.complexProcedures = new ArrayList<>();
     }
 
     public String getCpf() {
@@ -44,19 +59,19 @@ public class PatientDTO {
         this.age = age;
     }
 
-    public List<Comorbidities> getComorbidities() {
+    public List<Comorbiditie> getComorbidities() {
         return comorbidities;
     }
 
-    public void setComorbidities(List<Comorbidities> comorbidities) {
+    public void setComorbidities(List<Comorbiditie> comorbidities) {
         this.comorbidities = comorbidities;
     }
 
-    public List<ComplexProcedures> getComplexProcedures() {
+    public List<ComplexProcedure> getComplexProcedures() {
         return complexProcedures;
     }
 
-    public void setComplexProcedures(List<ComplexProcedures> complexProcedures) {
+    public void setComplexProcedures(List<ComplexProcedure> complexProcedures) {
         this.complexProcedures = complexProcedures;
     }
 }
