@@ -14,30 +14,35 @@ import lombok.Setter;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Schedule {
-    @Id
+   
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
     @ManyToOne
     @JoinColumn(name = "calendarId")
     @JsonIgnore
     private Calendar calendar;
 
+    private String time;
+    private String observation;
+    private String category;
+    
 //    @JoinColumn(name = "patientId")
 //    @JsonIgnore
 //    private Patient patient;
 
-    private String time;
-    private String observation;
-    private String category;
+    private Caregiver caregiver;
 
     public Schedule() {
     }
 
-    public Schedule(Calendar calendar, String time, String observation, String category) {
+    public Schedule(Calendar calendar, String time, String observation, String category, Caregiver caregiver) {
         this.calendar = calendar;
         this.time = time;
         this.observation = observation;
         this.category = category;
+        this.caregiver = caregiver;
     }
 
 //    public Schedule(Patient patient,Calendar calendar, String time, String observation, String category) {

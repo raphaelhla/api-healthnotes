@@ -1,8 +1,8 @@
 package com.ufcg.apihealthnotes.dto;
 
-import com.ufcg.apihealthnotes.entities.Patient;
-
 import java.time.LocalDate;
 
-public record ScheduleDTO(Patient patient, LocalDate date, String time, String observation, String category) {
+import com.ufcg.apihealthnotes.entities.Caregiver;
+
+public record ScheduleDTO(Caregiver caregiver, LocalDate date, String time, String observation, String category) {
 }

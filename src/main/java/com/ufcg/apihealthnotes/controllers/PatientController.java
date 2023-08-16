@@ -1,18 +1,30 @@
 package com.ufcg.apihealthnotes.controllers;
 
-import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
-import com.ufcg.apihealthnotes.dto.ComplexpRroceduresDTO;
-import com.ufcg.apihealthnotes.dto.PatientDTO;
-import com.ufcg.apihealthnotes.dto.ScheduleDTO;
-import com.ufcg.apihealthnotes.entities.Patient;
-import com.ufcg.apihealthnotes.services.PatientService;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
+import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
+import com.ufcg.apihealthnotes.dto.ComplexProceduresDTO;
+import com.ufcg.apihealthnotes.dto.PatientDTO;
+import com.ufcg.apihealthnotes.dto.ScheduleDTO;
+import com.ufcg.apihealthnotes.entities.Caregiver;
+import com.ufcg.apihealthnotes.entities.Patient;
+import com.ufcg.apihealthnotes.services.CaregiverService;
+import com.ufcg.apihealthnotes.services.PatientService;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @CrossOrigin("*")
@@ -22,12 +34,16 @@ public class PatientController {
 
     @Autowired
     private PatientService patientService;
+    
+    @Autowired
+    private CaregiverService caregiverService;
 
     @PostMapping
     public ResponseEntity<?> savePatient(@RequestBody PatientDTO patientDTO) {
         try {
-            patientService.savePatient(patientDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+        	System.out.println(patientDTO);
+            Patient patient = patientService.savePatient(patientDTO);
+            return new ResponseEntity<>(patient, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -46,7 +62,7 @@ public class PatientController {
     @GetMapping("/{cpf}")
     public ResponseEntity<?> getPatientByCpf(@PathVariable String cpf) {
         try {
-            Patient patient = patientService.findByCpf(cpf);
+            Patient patient = patientService.getPatientByCpf(cpf);
             return new ResponseEntity<>(patient, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -63,7 +79,7 @@ public class PatientController {
         }
     }
 
-    @PutMapping
+    @PutMapping()
     public ResponseEntity<?> updatePatient(@RequestBody PatientDTO patientDTO) {
         try {
             Patient patient = patientService.updatePatient(patientDTO);
@@ -73,33 +89,39 @@ public class PatientController {
         }
     }
 
-    @PutMapping("/comorbidities/{id}")
-    public ResponseEntity<?> addComorbidities(@PathVariable String id, @RequestBody ComorbiditiesDTO comorbiditiesDTO) {
+    @PutMapping("/comorbidities/{cpf}")
+    public ResponseEntity<?> addComorbiditie(@PathVariable String cpf, @RequestBody ComorbiditiesDTO comorbiditiesDTO) {
         try {
-            patientService.addComorbidities(id, comorbiditiesDTO);
+            patientService.addComorbiditie(cpf, comorbiditiesDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/complexprocedures/{id}")
-    public ResponseEntity<?> addComplexProcedures(@PathVariable String id, @RequestBody ComplexpRroceduresDTO complexpRroceduresDTO) {
+    @PutMapping("/complexprocedures/{cpf}")
+    public ResponseEntity<?> addComplexProcedure(@PathVariable String cpf, @RequestBody ComplexProceduresDTO complexpRroceduresDTO) {
         try {
-            patientService.addComplexProcedures(id, complexpRroceduresDTO);
+            patientService.addComplexProcedure(cpf, complexpRroceduresDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/schedule/{id}")
-    public ResponseEntity<?> addSchedule(@PathVariable String id, @RequestBody ScheduleDTO scheduleDTO) {
+    @PutMapping("/schedule/{cpf}")
+    public ResponseEntity<?> addSchedule(@PathVariable String cpf, @RequestBody ScheduleDTO scheduleDTO) {
         try {
-            patientService.addSchedule(id, scheduleDTO);
+            patientService.addSchedule(cpf, scheduleDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+    
+    @GetMapping("/caregiver/{cpf}")
+    public ResponseEntity<?> getCaregiver(@PathVariable String cpf) {
+            Caregiver caregiver = caregiverService.getCaregiver(cpf);
+            return new ResponseEntity<>(caregiver, HttpStatus.CREATED);
     }
 }

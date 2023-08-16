@@ -18,21 +18,23 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Calendar {
+	
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
     @ManyToOne
-    @JoinColumn(name = "caregiverId")
+    @JoinColumn(name = "patientId")
     @JsonIgnore
-    private Caregiver caregiver;
+    private Patient patient;
 
     private LocalDate date;
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private List<Schedule> schedules = new ArrayList<>();
 
-    public Calendar(Caregiver caregiver, LocalDate date) {
-        this.caregiver = caregiver;
+    public Calendar(Patient patient, LocalDate date) {
+        this.patient = patient;
         this.date = date;
     }
 

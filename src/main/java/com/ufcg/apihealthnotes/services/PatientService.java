@@ -1,20 +1,26 @@
 package com.ufcg.apihealthnotes.services;
 
-import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
-import com.ufcg.apihealthnotes.dto.ComplexpRroceduresDTO;
-import com.ufcg.apihealthnotes.dto.PatientDTO;
-import com.ufcg.apihealthnotes.dto.ScheduleDTO;
-import com.ufcg.apihealthnotes.entities.*;
-import com.ufcg.apihealthnotes.repositories.CaregiverRepository;
-import com.ufcg.apihealthnotes.repositories.PatientRepository;
-import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
+import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
+import com.ufcg.apihealthnotes.dto.ComplexProceduresDTO;
+import com.ufcg.apihealthnotes.dto.PatientDTO;
+import com.ufcg.apihealthnotes.dto.ScheduleDTO;
+import com.ufcg.apihealthnotes.entities.Calendar;
+import com.ufcg.apihealthnotes.entities.Caregiver;
+import com.ufcg.apihealthnotes.entities.Comorbiditie;
+import com.ufcg.apihealthnotes.entities.ComplexProcedure;
+import com.ufcg.apihealthnotes.entities.Patient;
+import com.ufcg.apihealthnotes.entities.Schedule;
+import com.ufcg.apihealthnotes.repositories.PatientRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class PatientService {
@@ -22,92 +28,80 @@ public class PatientService {
     @Autowired
     private PatientRepository patientRepository;
 
-    @Autowired
-    private CaregiverRepository caregiverRepository;
-
     @Transactional
     public Patient savePatient(PatientDTO patientDTO) {
         Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
         Patient patient;
+        if (patientRepository.existsById(patientDTO.getCpf())) 
+            patient = patientRepository.findById(patientDTO.getCpf()).get();
+        else 
+            patient = new Patient(patientDTO);
+        
 
-        if (patientRepository.existsById(patientDTO.getCpf())) {
-            patient = patientRepository.findById(patientDTO.getCpf()).orElse(null);
-            patient.updateFromDTO(patientDTO);
-        } else {
-            patient = new Patient(patientDTO.getCpf(), patientDTO.getName(), patientDTO.getAge());
-            patient.updateFromDTO(patientDTO);
-        }
-
+//        patient.updateFromDTO(patientDTO);
         patient.getCaregivers().add(caregiver);
+        
         return patientRepository.save(patient);
     }
 
     public List<Patient> getAllPatients() {
         return this.patientRepository.findAll();
     }
+    
+    public Patient getPatientByCpf(String cpf) {
+        return this.patientRepository.findById(cpf).orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado"));
+    }
 
     public void deletePatient(String cpf) {
-        Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Patient patient = patientRepository.findById(cpf).orElse(null);
-        patient.getCaregivers().remove(caregiver);
-        patientRepository.save(patient);
+    	this.patientRepository.deleteById(cpf);
     }
 
     public Patient updatePatient(PatientDTO patientDTO) {
-        Patient patient = this.patientRepository.getById(patientDTO.getCpf());
-
-        patient.setAge(patientDTO.getAge());
-        patient.setCpf(patientDTO.getCpf());
-        patient.setName(patientDTO.getName());
+    	Patient patient = getPatientByCpf(patientDTO.getCpf());
+    	patient.updateFromDTO(patientDTO);
         return patientRepository.save(patient);
     }
 
-    public void addComplexProcedures(String id, ComplexpRroceduresDTO complexpRroceduresDTO) {
-        Patient patient = this.patientRepository.getById(id);
-        ComplexProcedures complexProcedures = new ComplexProcedures(patient, complexpRroceduresDTO.description());
-        patient.getComplexProcedures().add(complexProcedures);
-        this.patientRepository.save(patient);
+    public void addComplexProcedure(String cpf, ComplexProceduresDTO complexpRroceduresDTO) {
+    	Patient patient = getPatientByCpf(cpf);
+        ComplexProcedure complexProcedure = new ComplexProcedure(patient, complexpRroceduresDTO.description());
+        patient.addComplexProcedure(complexProcedure);
+
+        patientRepository.save(patient);
     }
 
-    public void addComorbidities(String id, ComorbiditiesDTO comorbiditiesDTO) {
-        Patient patient = this.patientRepository.getById(id);
-        Comorbidities comorbidities = new Comorbidities(patient, comorbiditiesDTO.description());
-        patient.getComorbidities().add(comorbidities);
-        this.patientRepository.save(patient);
+    public void addComorbiditie(String cpf, ComorbiditiesDTO comorbiditiesDTO) {
+    	Patient patient = getPatientByCpf(cpf);
+        Comorbiditie comorbiditie = new Comorbiditie(patient, comorbiditiesDTO.description());
+        patient.addComorbiditie(comorbiditie);
+        
+        patientRepository.save(patient);
     }
 
     public Set<Patient> findByCaregivers() {
         Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return patientRepository.findByCaregivers(caregiver);
     }
-
-    public void addSchedule(String id, ScheduleDTO scheduleDTO) {
-        Patient patient = patientRepository.getById(id);
-        Caregiver caregiver = caregiverRepository.getById(id);
-
-        boolean dateFound = false;
-
-        for (Calendar calendar : caregiver.getCalendar()) {
-            LocalDate date = calendar.getDate();
-
-            if (date.equals(scheduleDTO.date())) {
-                dateFound = true;
-                var schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category());
-                calendar.getSchedules().add(schedule);
-                break;
-            }
+    
+    public void addSchedule(String cpf, ScheduleDTO scheduleDTO) {
+    	Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Patient patient = getPatientByCpf(cpf);
+        LocalDate date = scheduleDTO.date();
+        
+        Calendar calendar;
+        if (patient.getCalendar().containsKey(date)) { 
+        	calendar = patient.getCalendar().get(date);
+        } else { 
+			calendar = new Calendar(patient, date);
+			patient.getCalendar().put(date, calendar);
         }
 
-        if (!dateFound) {
-            Calendar calendar = new Calendar(caregiver, scheduleDTO.date());
-            var schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category());
-            calendar.getSchedules().add(schedule);
-            caregiver.getCalendar().add(calendar);
-        }
-        caregiverRepository.save(caregiver);
+        Schedule schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category(), caregiver);
+        calendar.getSchedules().add(schedule);
+                
+        patientRepository.save(patient);
     }
 
-    public Patient findByCpf(String cpf) {
-        return this.patientRepository.findById(cpf).orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado"));
-    }
+
 }

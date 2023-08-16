@@ -1,17 +1,32 @@
 package com.ufcg.apihealthnotes.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
-import lombok.*;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_caregiver")
@@ -38,8 +53,8 @@ public class Caregiver implements UserDetails {
     @Column(nullable = false, length = 20)
     private String lastname;
 
-    @OneToMany(mappedBy = "caregiver", cascade = CascadeType.ALL)
-    private List<Calendar> calendar;
+//    @OneToMany(mappedBy = "caregiver", cascade = CascadeType.ALL)
+//    private Map<LocalDate, Calendar> calendar;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "caregivers", fetch = FetchType.EAGER)
