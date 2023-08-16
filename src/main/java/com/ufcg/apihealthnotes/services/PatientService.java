@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
 import com.ufcg.apihealthnotes.dto.ComplexProceduresDTO;
@@ -20,7 +21,6 @@ import com.ufcg.apihealthnotes.entities.Patient;
 import com.ufcg.apihealthnotes.entities.Schedule;
 import com.ufcg.apihealthnotes.repositories.PatientRepository;
 
-import jakarta.transaction.Transactional;
 
 @Service
 public class PatientService {
@@ -84,9 +84,10 @@ public class PatientService {
         return patientRepository.findByCaregivers(caregiver);
     }
     
-    public void addSchedule(String cpf, ScheduleDTO scheduleDTO) {
+    @Transactional
+    public void addSchedule(String cpfPatient, ScheduleDTO scheduleDTO) {
     	Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Patient patient = getPatientByCpf(cpf);
+        Patient patient = getPatientByCpf(cpfPatient);
         LocalDate date = scheduleDTO.date();
         
         Calendar calendar;
@@ -97,11 +98,9 @@ public class PatientService {
 			patient.getCalendar().put(date, calendar);
         }
 
-        Schedule schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category(), caregiver);
+        Schedule schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category(), patient, caregiver);
         calendar.getSchedules().add(schedule);
-                
+        
         patientRepository.save(patient);
     }
-
-
 }

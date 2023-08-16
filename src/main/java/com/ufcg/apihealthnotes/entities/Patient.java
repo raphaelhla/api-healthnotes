@@ -1,5 +1,6 @@
 package com.ufcg.apihealthnotes.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,9 +35,11 @@ import lombok.Setter;
 @EqualsAndHashCode(of = "cpf")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Patient {
+public class Patient implements Serializable{
 
-    @Id
+    private static final long serialVersionUID = 1L;
+
+	@Id
     private String cpf;
 
     @Column(nullable = false, length = 255)

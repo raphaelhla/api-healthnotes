@@ -27,7 +27,7 @@ public class CaregiverController {
     @GetMapping("/{cpf}")
     public ResponseEntity<?> getCaregiver(@PathVariable String cpf) {
             Caregiver caregiver = caregiverService.getCaregiver(cpf);
-            return new ResponseEntity<>(caregiver, HttpStatus.CREATED);
+            return new ResponseEntity<>(caregiver, HttpStatus.OK);
     }
     
     @PutMapping("/{caregiverCpf}/patient/{patientCpf}")

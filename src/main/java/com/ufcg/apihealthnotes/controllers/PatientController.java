@@ -19,9 +19,7 @@ import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
 import com.ufcg.apihealthnotes.dto.ComplexProceduresDTO;
 import com.ufcg.apihealthnotes.dto.PatientDTO;
 import com.ufcg.apihealthnotes.dto.ScheduleDTO;
-import com.ufcg.apihealthnotes.entities.Caregiver;
 import com.ufcg.apihealthnotes.entities.Patient;
-import com.ufcg.apihealthnotes.services.CaregiverService;
 import com.ufcg.apihealthnotes.services.PatientService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -35,13 +33,9 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
     
-    @Autowired
-    private CaregiverService caregiverService;
-
     @PostMapping
     public ResponseEntity<?> savePatient(@RequestBody PatientDTO patientDTO) {
         try {
-        	System.out.println(patientDTO);
             Patient patient = patientService.savePatient(patientDTO);
             return new ResponseEntity<>(patient, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
@@ -109,19 +103,13 @@ public class PatientController {
         }
     }
 
-    @PutMapping("/schedule/{cpf}")
-    public ResponseEntity<?> addSchedule(@PathVariable String cpf, @RequestBody ScheduleDTO scheduleDTO) {
+    @PutMapping("/schedule/{cpfPatient}")
+    public ResponseEntity<?> addSchedule(@PathVariable String cpfPatient, @RequestBody ScheduleDTO scheduleDTO) {
         try {
-            patientService.addSchedule(cpf, scheduleDTO);
+            patientService.addSchedule(cpfPatient, scheduleDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }
-    
-    @GetMapping("/caregiver/{cpf}")
-    public ResponseEntity<?> getCaregiver(@PathVariable String cpf) {
-            Caregiver caregiver = caregiverService.getCaregiver(cpf);
-            return new ResponseEntity<>(caregiver, HttpStatus.CREATED);
     }
 }

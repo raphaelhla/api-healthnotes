@@ -74,12 +74,4 @@ public class PatientDTO {
     public void setComplexProcedures(List<ComplexProcedure> complexProcedures) {
         this.complexProcedures = complexProcedures;
     }
-
-	@Override
-	public String toString() {
-		return "PatientDTO [cpf=" + cpf + ", name=" + name + ", age=" + age + ", comorbidities=" + comorbidities
-				+ ", complexProcedures=" + complexProcedures + "]";
-	}
-    
-    
 }
