@@ -41,4 +41,11 @@ public class Calendar {
     public Calendar(LocalDate date) {
         this.date = date;
     }
+
+	@Override
+	public String toString() {
+		return "Calendar [schedules=" + schedules + "]";
+	}
+    
+    
 }

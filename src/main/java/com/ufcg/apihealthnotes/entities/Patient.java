@@ -107,4 +107,8 @@ public class Patient implements Serializable{
 		this.comorbidities.add(comorbiditie);
 	}
 
+	public void addCaregiver(Caregiver caregiver) {
+		this.caregivers.add(caregiver);
+	}
+
 }

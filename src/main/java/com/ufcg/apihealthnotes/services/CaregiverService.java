@@ -40,7 +40,7 @@ public class CaregiverService {
     public void pararDeAcompanharPaciente(String caregiverCpf, String patientCpf) {
 //        Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	Caregiver caregiver = caregiverRepository.findById(caregiverCpf).orElseThrow(() -> new IllegalArgumentException("Cuidador não encontrado"));
-        Patient patient = patientRepository.findById(caregiverCpf).orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado"));
+        Patient patient = patientRepository.findById(patientCpf).orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado"));
         
         caregiver.getPatients().remove(patient);
         patient.getCaregivers().remove(caregiver);

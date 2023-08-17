@@ -92,4 +92,8 @@ public class Caregiver implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+	public void addPatient(Patient patient) {
+		this.patients.add(patient);
+	}
 }

@@ -36,31 +36,17 @@ public class Schedule {
     private String category;
 
     @ManyToOne
-    @JoinColumn(name = "patientId")
-    @JsonIgnore
-    private Patient patient;
-
-    @ManyToOne
 	@JoinColumn(name = "caregiverId")
     private Caregiver caregiver;
 
     public Schedule() {
     }
 
-    public Schedule(Calendar calendar, String time, String observation, String category, Patient patient, Caregiver caregiver) {
+    public Schedule(Calendar calendar, String time, String observation, String category, Caregiver caregiver) {
         this.calendar = calendar;
         this.time = time;
         this.observation = observation;
         this.category = category;
-        this.patient = patient;
         this.caregiver = caregiver;
-    }
-
-//    public Schedule(Patient patient,Calendar calendar, String time, String observation, String category) {
-//        this.patient = patient;
-//        this.calendar = calendar;
-//        this.time = time;
-//        this.observation = observation;
-//        this.category = category;
-//    }
+    }  
 }

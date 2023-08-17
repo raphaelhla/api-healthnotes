@@ -2,6 +2,7 @@ package com.ufcg.apihealthnotes.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +42,8 @@ public class PatientService {
         
 
 //        patient.updateFromDTO(patientDTO);
-        patient.getCaregivers().add(caregiver);
+        patient.addCaregiver(caregiver);
+        caregiver.addPatient(patient);
         
         return patientRepository.save(patient);
     }
@@ -99,7 +101,7 @@ public class PatientService {
 			patient.getCalendar().put(date, calendar);
         }
 
-        Schedule schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category(), patient, caregiver);
+        Schedule schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category(), caregiver);
         calendar.getSchedules().add(schedule);
         
         patientRepository.save(patient);
@@ -107,7 +109,9 @@ public class PatientService {
 
 	public List<Calendar> getCalendar(String cpfPatient) {
 		Patient patient = getPatientByCpf(cpfPatient);
-		
+		for (Calendar c : patient.getCalendar().values()) {
+			System.out.println("OOOOO TAMANHO DA LISTA EH: \n\n" + c);
+		}
 		List<Calendar> calendar = new ArrayList<>(patient.getCalendar().values());
 		
 		return calendar;
