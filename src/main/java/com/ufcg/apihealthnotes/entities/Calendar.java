@@ -46,6 +46,10 @@ public class Calendar {
 	public String toString() {
 		return "Calendar [schedules=" + schedules + "]";
 	}
+	
+	public boolean isEmpty() {
+		return this.schedules.size() == 0;
+	}
     
     
 }

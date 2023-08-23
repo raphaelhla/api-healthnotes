@@ -2,7 +2,6 @@ package com.ufcg.apihealthnotes.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -29,6 +28,12 @@ public class PatientService {
 
     @Autowired
     private PatientRepository patientRepository;
+    
+//    @Autowired
+//    private CalendarService calendarService;
+//    
+//    @Autowired
+//    private ScheduleService scheduleService;
 
     @Transactional
     public Patient savePatient(PatientDTO patientDTO) {
@@ -107,13 +112,10 @@ public class PatientService {
         patientRepository.save(patient);
     }
 
-	public List<Calendar> getCalendar(String cpfPatient) {
+	public List<Calendar> getCalendarList(String cpfPatient) {
 		Patient patient = getPatientByCpf(cpfPatient);
-		for (Calendar c : patient.getCalendar().values()) {
-			System.out.println("OOOOO TAMANHO DA LISTA EH: \n\n" + c);
-		}
 		List<Calendar> calendar = new ArrayList<>(patient.getCalendar().values());
-		
 		return calendar;
 	}
+
 }

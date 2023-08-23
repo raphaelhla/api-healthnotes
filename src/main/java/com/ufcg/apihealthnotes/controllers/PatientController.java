@@ -69,7 +69,7 @@ public class PatientController {
     public ResponseEntity<?> deletePatient(@PathVariable String cpf) {
         try {
             patientService.deletePatient(cpf);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -116,9 +116,9 @@ public class PatientController {
     }
     
     @GetMapping("/{cpfPatient}/calendar")
-    public ResponseEntity<?> getCalendar(@PathVariable String cpfPatient) {
+    public ResponseEntity<?> getCalendarList(@PathVariable String cpfPatient) {
         try {
-        	List<Calendar> calendar = patientService.getCalendar(cpfPatient);
+        	List<Calendar> calendar = patientService.getCalendarList(cpfPatient);
             return new ResponseEntity<>(calendar, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
