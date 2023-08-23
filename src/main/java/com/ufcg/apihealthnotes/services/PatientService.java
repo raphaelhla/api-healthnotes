@@ -20,6 +20,7 @@ import com.ufcg.apihealthnotes.entities.Comorbiditie;
 import com.ufcg.apihealthnotes.entities.ComplexProcedure;
 import com.ufcg.apihealthnotes.entities.Patient;
 import com.ufcg.apihealthnotes.entities.Schedule;
+import com.ufcg.apihealthnotes.repositories.CaregiverRepository;
 import com.ufcg.apihealthnotes.repositories.PatientRepository;
 
 
@@ -28,6 +29,9 @@ public class PatientService {
 
     @Autowired
     private PatientRepository patientRepository;
+    
+    @Autowired
+    private CaregiverRepository caregiverRepository;
     
 //    @Autowired
 //    private CalendarService calendarService;
@@ -106,11 +110,34 @@ public class PatientService {
 			patient.getCalendar().put(date, calendar);
         }
 
-        Schedule schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category(), caregiver);
+        Schedule schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category(), caregiver.getCpf());
         calendar.getSchedules().add(schedule);
         
         patientRepository.save(patient);
     }
+    
+//    @Transactional
+//    public void addSchedule(String cpfPatient, ScheduleDTO scheduleDTO) {
+//		Patient patient = getPatientByCpf(cpfPatient);
+//        Caregiver caregiver = caregiverRepository.getById(id);
+//
+//        boolean dateFound = false;
+//
+//        for (Calendar calendar : patient.getCalendar()) {
+//            LocalDate date = calendar.getDate();
+//
+//            if (date.equals(scheduleDTO.date())) {
+//            }
+//
+//            if (!dateFound) {
+//                Calendar calendar = new Calendar(patient, scheduleDTO.date());
+//                var schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category());
+//                calendar.getSchedules().add(schedule);
+//                patient.getCalendar().add(calendar);
+//            }
+//            caregiverRepository.save(caregiver);
+//        }
+//    }
 
 	public List<Calendar> getCalendarList(String cpfPatient) {
 		Patient patient = getPatientByCpf(cpfPatient);

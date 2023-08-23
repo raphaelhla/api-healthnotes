@@ -24,7 +24,7 @@ public class Calendar {
     private Long id;
     
     @ManyToOne
-    @JoinColumn(name = "patientId")
+    @JoinColumn(name = "patientCpf")
     @JsonIgnore
     private Patient patient;
 

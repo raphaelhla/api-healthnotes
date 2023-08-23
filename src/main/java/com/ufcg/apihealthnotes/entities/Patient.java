@@ -55,8 +55,11 @@ public class Patient implements Serializable{
     private List<ComplexProcedure> complexProcedures;
 
     
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Map<LocalDate, Calendar> calendar;
+    
+//    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Calendar> calendar;
 
 
     @JsonIgnore

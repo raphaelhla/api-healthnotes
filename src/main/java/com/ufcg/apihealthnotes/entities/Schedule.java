@@ -35,18 +35,28 @@ public class Schedule {
     private String observation;
     private String category;
 
-    @ManyToOne
-	@JoinColumn(name = "caregiverId")
-    private Caregiver caregiver;
+//    @ManyToOne
+//	@JoinColumn(name = "caregiverCpf")
+//    private Caregiver caregiver;
+    
+    private String caregiverId;
 
     public Schedule() {
     }
 
-    public Schedule(Calendar calendar, String time, String observation, String category, Caregiver caregiver) {
-        this.calendar = calendar;
-        this.time = time;
-        this.observation = observation;
-        this.category = category;
-        this.caregiver = caregiver;
-    }  
+//    public Schedule(Calendar calendar, String time, String observation, String category, Caregiver caregiver) {
+//        this.calendar = calendar;
+//        this.time = time;
+//        this.observation = observation;
+//        this.category = category;
+//        this.caregiver = caregiver;
+//    }  
+    
+	public Schedule(Calendar calendar, String time, String observation, String category, String caregiverId) {
+		this.calendar = calendar;
+		this.time = time;
+		this.observation = observation;
+		this.category = category;
+		this.caregiverId = caregiverId;
+	}
 }
