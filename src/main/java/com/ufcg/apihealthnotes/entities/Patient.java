@@ -2,6 +2,7 @@ package com.ufcg.apihealthnotes.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -70,13 +71,13 @@ public class Patient implements Serializable{
     private Set<Caregiver> caregivers = new HashSet<>();
 
     public Patient(PatientDTO patientDTO) {
-        List<Comorbiditie> comorbidities = patientDTO.getComorbidities().stream()
-                .map(e -> new Comorbiditie(this, e.getDescription()))
-                .collect(Collectors.toList());
+	   List<Comorbiditie> comorbidities = Arrays.stream(patientDTO.getComorbidities().split(","))
+	            .map(description -> new Comorbiditie(this, description.trim()))
+	            .collect(Collectors.toList());
 
-        List<ComplexProcedure> complexProcedures = patientDTO.getComplexProcedures().stream()
-                .map(s -> new ComplexProcedure(this, s.getDescription()))
-                .collect(Collectors.toList());
+	    List<ComplexProcedure> complexProcedures = Arrays.stream(patientDTO.getComplexProcedures().split(","))
+	            .map(description -> new ComplexProcedure(this, description.trim()))
+	            .collect(Collectors.toList());
         
         this.cpf = patientDTO.getCpf();
         this.name = patientDTO.getName();
@@ -98,8 +99,8 @@ public class Patient implements Serializable{
 
         this.name = patientDTO.getName();
         this.age = patientDTO.getAge();
-        this.comorbidities = patientDTO.getComorbidities();
-        this.complexProcedures = patientDTO.getComplexProcedures();
+//        this.comorbidities = patientDTO.getComorbidities();
+//        this.complexProcedures = patientDTO.getComplexProcedures();
     }
 
 	public void addComplexProcedure(ComplexProcedure complexProcedure) {

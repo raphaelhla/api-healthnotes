@@ -1,25 +1,17 @@
 package com.ufcg.apihealthnotes.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.ufcg.apihealthnotes.entities.Comorbiditie;
-import com.ufcg.apihealthnotes.entities.ComplexProcedure;
-
-
 public class PatientDTO {
     private String cpf;
     private String name;
     private String age;
-    private List<Comorbiditie> comorbidities;
-    private List<ComplexProcedure> complexProcedures;
+    private String comorbidities;
+    private String complexProcedures;
 
     public PatientDTO() {
-    	this.comorbidities = new ArrayList<>();
-        this.complexProcedures = new ArrayList<>();
+
     }
     
-    public PatientDTO(String cpf, String name, String age, List<Comorbiditie> comorbidities, List<ComplexProcedure> complexProcedures) {
+    public PatientDTO(String cpf, String name, String age, String comorbidities, String complexProcedures) {
         this.cpf = cpf;
         this.name = name;
         this.age = age;
@@ -31,8 +23,6 @@ public class PatientDTO {
         this.cpf = cpf;
         this.name = name;
         this.age = age;
-        this.comorbidities = new ArrayList<>();
-        this.complexProcedures = new ArrayList<>();
     }
 
     public String getCpf() {
@@ -59,19 +49,19 @@ public class PatientDTO {
         this.age = age;
     }
 
-    public List<Comorbiditie> getComorbidities() {
+    public String getComorbidities() {
         return comorbidities;
     }
 
-    public void setComorbidities(List<Comorbiditie> comorbidities) {
+    public void setComorbidities(String comorbidities) {
         this.comorbidities = comorbidities;
     }
 
-    public List<ComplexProcedure> getComplexProcedures() {
+    public String getComplexProcedures() {
         return complexProcedures;
     }
 
-    public void setComplexProcedures(List<ComplexProcedure> complexProcedures) {
+    public void setComplexProcedures(String complexProcedures) {
         this.complexProcedures = complexProcedures;
     }
 }

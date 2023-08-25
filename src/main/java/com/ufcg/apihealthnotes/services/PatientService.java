@@ -115,34 +115,18 @@ public class PatientService {
         
         patientRepository.save(patient);
     }
-    
-//    @Transactional
-//    public void addSchedule(String cpfPatient, ScheduleDTO scheduleDTO) {
-//		Patient patient = getPatientByCpf(cpfPatient);
-//        Caregiver caregiver = caregiverRepository.getById(id);
-//
-//        boolean dateFound = false;
-//
-//        for (Calendar calendar : patient.getCalendar()) {
-//            LocalDate date = calendar.getDate();
-//
-//            if (date.equals(scheduleDTO.date())) {
-//            }
-//
-//            if (!dateFound) {
-//                Calendar calendar = new Calendar(patient, scheduleDTO.date());
-//                var schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category());
-//                calendar.getSchedules().add(schedule);
-//                patient.getCalendar().add(calendar);
-//            }
-//            caregiverRepository.save(caregiver);
-//        }
-//    }
 
-	public List<Calendar> getCalendarList(String cpfPatient) {
+	public List<Schedule> getSchedulesByDate(String cpfPatient, LocalDate data) {
+		List<Schedule> retorno = new ArrayList<>();
+		
 		Patient patient = getPatientByCpf(cpfPatient);
-		List<Calendar> calendar = new ArrayList<>(patient.getCalendar().values());
-		return calendar;
+		Calendar calendar = patient.getCalendar().get(data);
+		
+		if (calendar != null) {
+			retorno = calendar.getSchedules();
+		}
+		
+		return retorno;
 	}
 
 }

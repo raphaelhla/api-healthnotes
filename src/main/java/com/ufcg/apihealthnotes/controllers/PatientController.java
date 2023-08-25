@@ -1,5 +1,6 @@
 package com.ufcg.apihealthnotes.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -20,8 +21,8 @@ import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
 import com.ufcg.apihealthnotes.dto.ComplexProceduresDTO;
 import com.ufcg.apihealthnotes.dto.PatientDTO;
 import com.ufcg.apihealthnotes.dto.ScheduleDTO;
-import com.ufcg.apihealthnotes.entities.Calendar;
 import com.ufcg.apihealthnotes.entities.Patient;
+import com.ufcg.apihealthnotes.entities.Schedule;
 import com.ufcg.apihealthnotes.services.PatientService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -115,11 +116,11 @@ public class PatientController {
         }
     }
     
-    @GetMapping("/{cpfPatient}/calendar")
-    public ResponseEntity<?> getCalendarList(@PathVariable String cpfPatient) {
+    @GetMapping("/{cpfPatient}/calendar/{data}")
+    public ResponseEntity<?> getSchedulesByDate(@PathVariable String cpfPatient, @PathVariable LocalDate data) {
         try {
-        	List<Calendar> calendar = patientService.getCalendarList(cpfPatient);
-            return new ResponseEntity<>(calendar, HttpStatus.OK);
+        	List<Schedule> schedules = patientService.getSchedulesByDate(cpfPatient, data);
+            return new ResponseEntity<>(schedules, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
