@@ -61,6 +61,9 @@ public class Patient implements Serializable{
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Map<LocalDate, Calendar> calendar;
     
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<ChecklistItem> checklist;
+    
 //    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private List<Calendar> calendar;
 
@@ -119,5 +122,9 @@ public class Patient implements Serializable{
 	public void addCaregiver(Caregiver caregiver) {
 		this.caregivers.add(caregiver);
 	}
+	
+//	public void addChecklistItem(ChecklistItem checklistItem) {
+//		this.checklist.add(checklistItem);
+//	}
 
 }

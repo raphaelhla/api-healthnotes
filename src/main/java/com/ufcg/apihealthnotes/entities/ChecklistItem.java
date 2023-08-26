@@ -15,27 +15,27 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "tb_comorbidities")
-public class Comorbiditie {
+@Table(name = "tb_checklist_item")
+public class ChecklistItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+	private String description;
+	private boolean marked;
+
     @ManyToOne
     @JoinColumn(name = "patientId")
     @JsonIgnore
     private Patient patient;
-    private String description;
-
-    public Comorbiditie() {
-    }
-
-    public Comorbiditie(Patient patient, String description) {
-        this.patient = patient;
-        this.description = description;
-    }
-
-    public Comorbiditie(Patient patient) {
-        this.patient = patient;
-    }
+	
+	public ChecklistItem() {
+	}
+	
+	public ChecklistItem(String description, boolean marked, Patient patient) {
+		this.description = description;
+		this.marked = marked;
+		this.patient = patient;
+	}
+	
 }

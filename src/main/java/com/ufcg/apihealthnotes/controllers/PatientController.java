@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ufcg.apihealthnotes.dto.ChecklistItemDTO;
 import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
 import com.ufcg.apihealthnotes.dto.ComplexProceduresDTO;
 import com.ufcg.apihealthnotes.dto.PatientDTO;
 import com.ufcg.apihealthnotes.dto.ScheduleDTO;
+import com.ufcg.apihealthnotes.entities.ChecklistItem;
 import com.ufcg.apihealthnotes.entities.Patient;
 import com.ufcg.apihealthnotes.entities.Schedule;
 import com.ufcg.apihealthnotes.services.PatientService;
@@ -121,6 +123,26 @@ public class PatientController {
         try {
         	List<Schedule> schedules = patientService.getSchedulesByDate(cpfPatient, data);
             return new ResponseEntity<>(schedules, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @PostMapping("/{cpfPatient}/checklist")
+    public ResponseEntity<?> addChecklistItem(@PathVariable String cpfPatient, @RequestBody ChecklistItemDTO checklistItemDTO) {
+        try {
+            ChecklistItem checklistItem = patientService.addChecklistItem(cpfPatient, checklistItemDTO);
+            return new ResponseEntity<>(checklistItem, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @GetMapping("/{cpfPatient}/checklist")
+    public ResponseEntity<?> getChecklist(@PathVariable String cpfPatient) {
+        try {
+            List<ChecklistItem> checklist = patientService.getChecklistItem(cpfPatient);
+            return new ResponseEntity<>(checklist, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

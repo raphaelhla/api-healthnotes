@@ -1,16 +1,5 @@
 package com.ufcg.apihealthnotes.dto;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ufcg.apihealthnotes.entities.Calendar;
-import com.ufcg.apihealthnotes.entities.Caregiver;
-import com.ufcg.apihealthnotes.entities.Comorbiditie;
-import com.ufcg.apihealthnotes.entities.ComplexProcedure;
-
 import lombok.Getter;
 import lombok.Setter;
 
