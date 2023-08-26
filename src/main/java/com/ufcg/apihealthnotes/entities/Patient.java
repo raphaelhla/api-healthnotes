@@ -48,6 +48,8 @@ public class Patient implements Serializable{
 
     @Column(nullable = false, length = 3)
     private String age;
+    
+    private String profilePhoto;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Comorbiditie> comorbidities;
@@ -85,6 +87,7 @@ public class Patient implements Serializable{
 		this.calendar = new HashMap<>();
         this.comorbidities = comorbidities;
         this.complexProcedures = complexProcedures;
+        this.profilePhoto = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 //		updateFromDTO(patientDTO);
     }
 
@@ -99,6 +102,8 @@ public class Patient implements Serializable{
 
         this.name = patientDTO.getName();
         this.age = patientDTO.getAge();
+        this.profilePhoto = patientDTO.getProfilePhoto();
+
 //        this.comorbidities = patientDTO.getComorbidities();
 //        this.complexProcedures = patientDTO.getComplexProcedures();
     }
