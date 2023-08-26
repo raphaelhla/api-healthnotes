@@ -48,4 +48,9 @@ public class CaregiverService {
         caregiverRepository.save(caregiver);
         patientRepository.save(patient);
     }
+
+	public Integer getNumberPatients(String caregiverCpf) {
+		Caregiver caregiver = getCaregiver(caregiverCpf);
+		return caregiver.getNumberPatients();	
+	}
 }

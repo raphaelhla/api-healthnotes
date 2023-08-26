@@ -2,6 +2,7 @@ package com.ufcg.apihealthnotes.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -110,7 +111,7 @@ public class PatientService {
 			patient.getCalendar().put(date, calendar);
         }
 
-        Schedule schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.observation(), scheduleDTO.category(), caregiver.getCpf());
+        Schedule schedule = new Schedule(calendar, scheduleDTO.time(), scheduleDTO.description(), caregiver.getCpf());
         calendar.getSchedules().add(schedule);
         
         patientRepository.save(patient);
@@ -124,6 +125,7 @@ public class PatientService {
 		
 		if (calendar != null) {
 			retorno = calendar.getSchedules();
+			Collections.sort(retorno);
 		}
 		
 		return retorno;

@@ -96,4 +96,8 @@ public class Caregiver implements UserDetails {
 	public void addPatient(Patient patient) {
 		this.patients.add(patient);
 	}
+
+	public Integer getNumberPatients() {
+		return patients.size();
+	}
 }

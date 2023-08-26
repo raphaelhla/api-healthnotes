@@ -106,7 +106,7 @@ public class PatientController {
         }
     }
 
-    @PutMapping("/{cpfPatient}/schedule")
+    @PostMapping("/{cpfPatient}/add-schedule")
     public ResponseEntity<?> addSchedule(@PathVariable String cpfPatient, @RequestBody ScheduleDTO scheduleDTO) {
         try {
             patientService.addSchedule(cpfPatient, scheduleDTO);

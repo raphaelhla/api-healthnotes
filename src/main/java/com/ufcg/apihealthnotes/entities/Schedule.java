@@ -20,7 +20,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Schedule {
+public class Schedule implements Comparable<Schedule>{
    
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,8 +32,7 @@ public class Schedule {
     private Calendar calendar;
 
     private String time;
-    private String observation;
-    private String category;
+    private String description;
 
 //    @ManyToOne
 //	@JoinColumn(name = "caregiverCpf")
@@ -52,11 +51,15 @@ public class Schedule {
 //        this.caregiver = caregiver;
 //    }  
     
-	public Schedule(Calendar calendar, String time, String observation, String category, String caregiverId) {
+	public Schedule(Calendar calendar, String time, String description, String caregiverId) {
 		this.calendar = calendar;
 		this.time = time;
-		this.observation = observation;
-		this.category = category;
+		this.description = description;
 		this.caregiverId = caregiverId;
+	}
+
+	@Override
+	public int compareTo(Schedule otherSchedule) {
+		return this.time.compareTo(otherSchedule.time);
 	}
 }

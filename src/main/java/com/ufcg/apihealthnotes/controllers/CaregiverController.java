@@ -39,4 +39,14 @@ public class CaregiverController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @GetMapping("/{caregiverCpf}/number-patients")
+    public ResponseEntity<?> getNumberPatients(@PathVariable String caregiverCpf) {
+        try {
+            Integer numPatients = caregiverService.getNumberPatients(caregiverCpf);
+            return new ResponseEntity<>(numPatients, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 }
