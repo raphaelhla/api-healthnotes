@@ -157,4 +157,14 @@ public class PatientController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @PutMapping("/{cpfPatient}/checklist/{checklistItemId}")
+    public ResponseEntity<?> updateChecklistItem(@PathVariable String cpfPatient, @PathVariable Long checklistItemId) {
+        try {
+            patientService.updateChecklistItem(cpfPatient, checklistItemId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

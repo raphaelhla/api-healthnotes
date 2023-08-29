@@ -167,4 +167,18 @@ public class PatientService {
 		checklistItemRepository.delete(checklistItem);
 	}
 
+	public void updateChecklistItem(String cpfPatient, Long checklistItemId) {
+		Patient patient = getPatientByCpf(cpfPatient);
+		ChecklistItem checklistItem = checklistItemRepository.findByIdAndPatient(checklistItemId, patient);
+		
+		if (checklistItem == null) {
+			throw new IllegalArgumentException(String.format("Não existe nenhum ChecklistItem com o id %d associado ao paciente com o cpf %s", checklistItemId, cpfPatient));
+		}
+		
+		checklistItem.setMarked(!checklistItem.isMarked());
+		
+		checklistItemRepository.save(checklistItem);
+		
+	}
+
 }
