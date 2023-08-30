@@ -2,7 +2,6 @@ package com.ufcg.apihealthnotes.controllers;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ufcg.apihealthnotes.dto.CaregiverPatientDTO;
 import com.ufcg.apihealthnotes.dto.ChecklistItemDTO;
 import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
 import com.ufcg.apihealthnotes.dto.ComplexProceduresDTO;
@@ -39,9 +39,9 @@ public class PatientController {
     private PatientService patientService;
     
     @PostMapping
-    public ResponseEntity<?> savePatient(@RequestBody PatientDTO patientDTO) {
+    public ResponseEntity<?> savePatient(@RequestBody CaregiverPatientDTO caregiverPatientDTO) {
         try {
-            Patient patient = patientService.savePatient(patientDTO);
+            Patient patient = patientService.savePatient(caregiverPatientDTO);
             return new ResponseEntity<>(patient, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -51,7 +51,7 @@ public class PatientController {
     @GetMapping
     public ResponseEntity<?> getAllPatients() {
         try {
-            Set<Patient> patients = patientService.findByCaregivers();
+        	List<Patient> patients = patientService.findByCaregivers();
             return new ResponseEntity<>(patients, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

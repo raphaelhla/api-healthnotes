@@ -18,9 +18,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -64,16 +61,10 @@ public class Patient implements Serializable{
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<ChecklistItem> checklist;
     
-//    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Calendar> calendar;
-
-
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "patient_caregiver",
-            joinColumns = @JoinColumn(name = "patient_id"),
-            inverseJoinColumns = @JoinColumn(name = "caregiver_id"))
-    private Set<Caregiver> caregivers = new HashSet<>();
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<CaregiverPatient> caregiverPatients;
+
 
     public Patient(PatientDTO patientDTO) {
 	   List<Comorbiditie> comorbidities = Arrays.stream(patientDTO.getComorbidities().split(","))
@@ -91,6 +82,8 @@ public class Patient implements Serializable{
         this.comorbidities = comorbidities;
         this.complexProcedures = complexProcedures;
         this.profilePhoto = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+        
+        this.caregiverPatients = new HashSet<>();
 //		updateFromDTO(patientDTO);
     }
 
@@ -119,9 +112,13 @@ public class Patient implements Serializable{
 		this.comorbidities.add(comorbiditie);
 	}
 
-	public void addCaregiver(Caregiver caregiver) {
-		this.caregivers.add(caregiver);
+	public void addCaregiverPatient(CaregiverPatient caregiverPatient) {
+		this.caregiverPatients.add(caregiverPatient);
 	}
+
+//	public void addCaregiver(Caregiver caregiver) {
+//		this.caregivers.add(caregiver);
+//	}
 	
 //	public void addChecklistItem(ChecklistItem checklistItem) {
 //		this.checklist.add(checklistItem);

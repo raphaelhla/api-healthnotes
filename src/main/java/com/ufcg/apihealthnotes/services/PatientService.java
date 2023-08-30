@@ -4,13 +4,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ufcg.apihealthnotes.dto.AtendimentoDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverPatientDTO;
 import com.ufcg.apihealthnotes.dto.ChecklistItemDTO;
 import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
 import com.ufcg.apihealthnotes.dto.ComplexProceduresDTO;
@@ -18,12 +20,13 @@ import com.ufcg.apihealthnotes.dto.PatientDTO;
 import com.ufcg.apihealthnotes.dto.ScheduleDTO;
 import com.ufcg.apihealthnotes.entities.Calendar;
 import com.ufcg.apihealthnotes.entities.Caregiver;
+import com.ufcg.apihealthnotes.entities.CaregiverPatient;
 import com.ufcg.apihealthnotes.entities.ChecklistItem;
 import com.ufcg.apihealthnotes.entities.Comorbiditie;
 import com.ufcg.apihealthnotes.entities.ComplexProcedure;
 import com.ufcg.apihealthnotes.entities.Patient;
 import com.ufcg.apihealthnotes.entities.Schedule;
-import com.ufcg.apihealthnotes.repositories.CaregiverRepository;
+import com.ufcg.apihealthnotes.repositories.CaregiverPatientRepository;
 import com.ufcg.apihealthnotes.repositories.ChecklistItemRepository;
 import com.ufcg.apihealthnotes.repositories.PatientRepository;
 
@@ -34,7 +37,7 @@ public class PatientService {
 	private PatientRepository patientRepository;
 
 	@Autowired
-	private CaregiverRepository caregiverRepository;
+	private CaregiverPatientRepository caregiverPatientRepository;
 	
 	@Autowired
 	private ChecklistItemRepository checklistItemRepository;
@@ -46,8 +49,11 @@ public class PatientService {
 //    private ScheduleService scheduleService;
 
 	@Transactional
-	public Patient savePatient(PatientDTO patientDTO) {
+	public Patient savePatient(CaregiverPatientDTO caregiverPatientDTO) {
 		Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		PatientDTO patientDTO = caregiverPatientDTO.getPatientDTO();
+		AtendimentoDTO atendimentoDTO = caregiverPatientDTO.getAtendimentoDTO();
 
 		Patient patient;
 		if (patientRepository.existsById(patientDTO.getCpf()))
@@ -55,9 +61,9 @@ public class PatientService {
 		else
 			patient = new Patient(patientDTO);
 
-//        patient.updateFromDTO(patientDTO);
-		patient.addCaregiver(caregiver);
-		caregiver.addPatient(patient);
+	    CaregiverPatient caregiverPatient = new CaregiverPatient(patient, caregiver, atendimentoDTO.getMonthlyCost());
+	    patient.addCaregiverPatient(caregiverPatient);
+	    caregiver.addCaregiverPatient(caregiverPatient);
 
 		return patientRepository.save(patient);
 	}
@@ -97,9 +103,15 @@ public class PatientService {
 		patientRepository.save(patient);
 	}
 
-	public Set<Patient> findByCaregivers() {
+	public List<Patient> findByCaregivers() {
 		Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return patientRepository.findByCaregivers(caregiver);
+		
+		List<CaregiverPatient> caregiverPatients = caregiverPatientRepository.findByCaregiverCpf(caregiver.getCpf());
+		List<Patient> patients = caregiverPatients.stream()
+                .map(cp -> cp.getPatient())
+                .collect(Collectors.toList());
+        
+		return patients;//patientRepository.findByCaregivers(caregiver);
 	}
 
 	@Transactional
@@ -158,27 +170,27 @@ public class PatientService {
 	public void deleteChecklistItem(String cpfPatient, Long checklistItemId) {
 		
 		Patient patient = getPatientByCpf(cpfPatient);
-		ChecklistItem checklistItem = checklistItemRepository.findByIdAndPatient(checklistItemId, patient);
-		
-		if (checklistItem == null) {
-			throw new IllegalArgumentException(String.format("Não existe nenhum ChecklistItem com o id %d associado ao paciente com o cpf %s", checklistItemId, cpfPatient));
-		}
+		ChecklistItem checklistItem = getChecklistItemByPatient(checklistItemId, patient);
 		
 		checklistItemRepository.delete(checklistItem);
 	}
 
 	public void updateChecklistItem(String cpfPatient, Long checklistItemId) {
 		Patient patient = getPatientByCpf(cpfPatient);
-		ChecklistItem checklistItem = checklistItemRepository.findByIdAndPatient(checklistItemId, patient);
-		
-		if (checklistItem == null) {
-			throw new IllegalArgumentException(String.format("Não existe nenhum ChecklistItem com o id %d associado ao paciente com o cpf %s", checklistItemId, cpfPatient));
-		}
+		ChecklistItem checklistItem = getChecklistItemByPatient(checklistItemId, patient);
 		
 		checklistItem.setMarked(!checklistItem.isMarked());
 		
 		checklistItemRepository.save(checklistItem);
-		
 	}
-
+	
+	private ChecklistItem getChecklistItemByPatient(Long checklistItemId, Patient patient) {
+		ChecklistItem checklistItem = checklistItemRepository.findByIdAndPatient(checklistItemId, patient);
+		
+		if (checklistItem == null) {
+			throw new IllegalArgumentException(String.format("Não existe nenhum ChecklistItem com o id %d associado ao paciente com o cpf %s", checklistItemId, patient.getCpf()));
+		}
+		
+		return checklistItem;
+	}
 }

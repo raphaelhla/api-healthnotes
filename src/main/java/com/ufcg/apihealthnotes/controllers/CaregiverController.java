@@ -49,4 +49,14 @@ public class CaregiverController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @GetMapping("/{caregiverCpf}/monthly-cost")
+    public ResponseEntity<?> getMonthlyCost(@PathVariable String caregiverCpf) {
+        try {
+            Double monthlyCost = caregiverService.getMonthlyCost(caregiverCpf);
+            return new ResponseEntity<>(monthlyCost, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 }

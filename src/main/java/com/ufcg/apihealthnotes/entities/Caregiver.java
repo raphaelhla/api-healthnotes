@@ -12,16 +12,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -30,7 +30,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode(of = "cpf")
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @JsonIgnoreProperties(value = {"accountNonLocked", "credentialsNonExpired", "accountNonExpired", "enabled", "authorities", "username"})
 public class Caregiver implements UserDetails {
 
@@ -54,10 +54,19 @@ public class Caregiver implements UserDetails {
 //    @OneToMany(mappedBy = "caregiver", cascade = CascadeType.ALL)
 //    private Map<LocalDate, Calendar> calendar;
 
+//    @JsonIgnore
+//    @ManyToMany(mappedBy = "caregivers", fetch = FetchType.EAGER)
+//    private Set<Patient> patients = new HashSet<>();
+    
     @JsonIgnore
-    @ManyToMany(mappedBy = "caregivers", fetch = FetchType.EAGER)
-    private Set<Patient> patients = new HashSet<>();
+    @OneToMany(mappedBy = "caregiver", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<CaregiverPatient> caregiverPatients;
 
+
+    public Caregiver() {
+    	this.caregiverPatients = new HashSet<>();
+    }
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
@@ -93,11 +102,12 @@ public class Caregiver implements UserDetails {
         return true;
     }
 
-	public void addPatient(Patient patient) {
-		this.patients.add(patient);
+	public Integer getNumberPatients() {
+		return caregiverPatients.size();//patientCaregivers.size();
 	}
 
-	public Integer getNumberPatients() {
-		return patients.size();
+	public void addCaregiverPatient(CaregiverPatient caregiverPatient) {
+		this.caregiverPatients.add(caregiverPatient);
+		
 	}
 }
