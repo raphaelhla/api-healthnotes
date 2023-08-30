@@ -15,7 +15,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "tb_checklist_item")
+@Table(name = "checklist_item")
 public class ChecklistItem {
 
     @Id

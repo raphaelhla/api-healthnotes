@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_calendar")
+@Table(name = "calendar")
 @Getter
 @Setter
 @AllArgsConstructor

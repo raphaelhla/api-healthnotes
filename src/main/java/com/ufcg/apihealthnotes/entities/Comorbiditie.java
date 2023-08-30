@@ -15,7 +15,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "tb_comorbidities")
+@Table(name = "comorbidities")
 public class Comorbiditie {
 
     @Id
