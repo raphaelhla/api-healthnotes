@@ -8,7 +8,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "tb_complexprocedures")
+@Table(name = "complexprocedures")
 public class ComplexProcedure {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

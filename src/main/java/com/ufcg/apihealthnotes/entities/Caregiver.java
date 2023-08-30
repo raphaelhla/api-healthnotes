@@ -25,7 +25,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tb_caregiver")
+@Table(name = "caregiver")
 @Getter
 @Setter
 @EqualsAndHashCode(of = "cpf")
