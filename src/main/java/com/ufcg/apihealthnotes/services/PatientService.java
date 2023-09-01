@@ -11,21 +11,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ufcg.apihealthnotes.dto.AtendimentoDTO;
 import com.ufcg.apihealthnotes.dto.CaregiverPatientDTO;
+import com.ufcg.apihealthnotes.dto.NewPatientDTO;
 import com.ufcg.apihealthnotes.dto.ChecklistItemDTO;
 import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
 import com.ufcg.apihealthnotes.dto.ComplexProceduresDTO;
 import com.ufcg.apihealthnotes.dto.PatientDTO;
 import com.ufcg.apihealthnotes.dto.ScheduleDTO;
 import com.ufcg.apihealthnotes.entities.Calendar;
-import com.ufcg.apihealthnotes.entities.Caregiver;
-import com.ufcg.apihealthnotes.entities.CaregiverPatient;
 import com.ufcg.apihealthnotes.entities.ChecklistItem;
 import com.ufcg.apihealthnotes.entities.Comorbiditie;
 import com.ufcg.apihealthnotes.entities.ComplexProcedure;
 import com.ufcg.apihealthnotes.entities.Patient;
 import com.ufcg.apihealthnotes.entities.Schedule;
+import com.ufcg.apihealthnotes.entities.caregiver.Caregiver;
+import com.ufcg.apihealthnotes.entities.caregiver.CaregiverPatient;
 import com.ufcg.apihealthnotes.repositories.CaregiverPatientRepository;
 import com.ufcg.apihealthnotes.repositories.ChecklistItemRepository;
 import com.ufcg.apihealthnotes.repositories.PatientRepository;
@@ -38,9 +38,12 @@ public class PatientService {
 
 	@Autowired
 	private CaregiverPatientRepository caregiverPatientRepository;
-	
+
 	@Autowired
 	private ChecklistItemRepository checklistItemRepository;
+
+	@Autowired
+	private CaregiverService caregiverService;
 
 //    @Autowired
 //    private CalendarService calendarService;
@@ -49,23 +52,37 @@ public class PatientService {
 //    private ScheduleService scheduleService;
 
 	@Transactional
-	public Patient savePatient(CaregiverPatientDTO caregiverPatientDTO) {
-		Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		PatientDTO patientDTO = caregiverPatientDTO.getPatientDTO();
-		AtendimentoDTO atendimentoDTO = caregiverPatientDTO.getAtendimentoDTO();
+	public Patient savePatient(NewPatientDTO newPatientDTO) {
+		PatientDTO patientDTO = newPatientDTO.getPatientDTO();
+//		CaregiverPatientDTO caregiverPatientDTO = newPatientDTO.getCaregiverPatientDTO();
 
+//		Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Patient patient;
 		if (patientRepository.existsById(patientDTO.getCpf()))
 			patient = patientRepository.findById(patientDTO.getCpf()).get();
 		else
 			patient = new Patient(patientDTO);
 
-	    CaregiverPatient caregiverPatient = new CaregiverPatient(patient, caregiver, atendimentoDTO.getMonthlyCost());
-	    patient.addCaregiverPatient(caregiverPatient);
-	    caregiver.addCaregiverPatient(caregiverPatient);
-
 		return patientRepository.save(patient);
+	}
+	
+	@Transactional
+	public void addPatientInfo(NewPatientDTO newPatientDTO, String caregiverCpf) {
+		PatientDTO patientDTO = newPatientDTO.getPatientDTO();
+		CaregiverPatientDTO caregiverPatientDTO = newPatientDTO.getCaregiverPatientDTO();
+
+//		Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Caregiver caregiver = caregiverService.getCaregiver(caregiverCpf);
+
+		Patient patient = getPatientByCpf(patientDTO.getCpf());
+
+		CaregiverPatient caregiverPatient = new CaregiverPatient(patient, caregiver, caregiverPatientDTO);
+	    patient.addCaregiverPatient(caregiverPatient);
+		caregiver.addCaregiverPatient(caregiverPatient);
+
+//		patientRepository.save(patient);
+		caregiverPatientRepository.save(caregiverPatient);
+		caregiverService.saveCaregiver(caregiver);
 	}
 
 	public List<Patient> getAllPatients() {
@@ -105,13 +122,11 @@ public class PatientService {
 
 	public List<Patient> findByCaregivers() {
 		Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
+
 		List<CaregiverPatient> caregiverPatients = caregiverPatientRepository.findByCaregiverCpf(caregiver.getCpf());
-		List<Patient> patients = caregiverPatients.stream()
-                .map(cp -> cp.getPatient())
-                .collect(Collectors.toList());
-        
-		return patients;//patientRepository.findByCaregivers(caregiver);
+		List<Patient> patients = caregiverPatients.stream().map(cp -> cp.getPatient()).collect(Collectors.toList());
+
+		return patients;// patientRepository.findByCaregivers(caregiver);
 	}
 
 	@Transactional
@@ -150,7 +165,8 @@ public class PatientService {
 
 	public ChecklistItem addChecklistItem(String cpfPatient, ChecklistItemDTO checklistItemDTO) {
 		Patient patient = getPatientByCpf(cpfPatient);
-		ChecklistItem checklistItem = new ChecklistItem(checklistItemDTO.getDescription(), checklistItemDTO.isMarked(), patient);
+		ChecklistItem checklistItem = new ChecklistItem(checklistItemDTO.getDescription(), checklistItemDTO.isMarked(),
+				patient);
 		return checklistItemRepository.save(checklistItem);
 	}
 
@@ -159,7 +175,7 @@ public class PatientService {
 
 		Patient patient = getPatientByCpf(cpfPatient);
 		List<ChecklistItem> checklist = patient.getChecklist();
-		
+
 		if (checklist != null) {
 			retorno = checklist;
 		}
@@ -168,29 +184,31 @@ public class PatientService {
 	}
 
 	public void deleteChecklistItem(String cpfPatient, Long checklistItemId) {
-		
+
 		Patient patient = getPatientByCpf(cpfPatient);
 		ChecklistItem checklistItem = getChecklistItemByPatient(checklistItemId, patient);
-		
+
 		checklistItemRepository.delete(checklistItem);
 	}
 
 	public void updateChecklistItem(String cpfPatient, Long checklistItemId) {
 		Patient patient = getPatientByCpf(cpfPatient);
 		ChecklistItem checklistItem = getChecklistItemByPatient(checklistItemId, patient);
-		
+
 		checklistItem.setMarked(!checklistItem.isMarked());
-		
+
 		checklistItemRepository.save(checklistItem);
 	}
-	
+
 	private ChecklistItem getChecklistItemByPatient(Long checklistItemId, Patient patient) {
 		ChecklistItem checklistItem = checklistItemRepository.findByIdAndPatient(checklistItemId, patient);
-		
+
 		if (checklistItem == null) {
-			throw new IllegalArgumentException(String.format("Não existe nenhum ChecklistItem com o id %d associado ao paciente com o cpf %s", checklistItemId, patient.getCpf()));
+			throw new IllegalArgumentException(
+					String.format("Não existe nenhum ChecklistItem com o id %d associado ao paciente com o cpf %s",
+							checklistItemId, patient.getCpf()));
 		}
-		
+
 		return checklistItem;
 	}
 }

@@ -1,5 +1,10 @@
 package com.ufcg.apihealthnotes.dto;
 
+import java.util.Map;
+
+import com.ufcg.apihealthnotes.entities.caregiver.Appointment;
+import com.ufcg.apihealthnotes.enums.DayOfWeek;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +12,6 @@ import lombok.Setter;
 @Setter
 public class CaregiverPatientDTO {
 
-	private PatientDTO patientDTO;
-    private AtendimentoDTO atendimentoDTO;
+    private Double monthlyCost;
+    private Map<DayOfWeek, Appointment> appointmentDays;
 }

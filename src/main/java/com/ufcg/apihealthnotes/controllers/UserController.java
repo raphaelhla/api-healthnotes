@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ufcg.apihealthnotes.dto.CaregiverAutenticationDTO;
 import com.ufcg.apihealthnotes.dto.CaregiverRegisterDTO;
-import com.ufcg.apihealthnotes.entities.Caregiver;
+import com.ufcg.apihealthnotes.entities.caregiver.Caregiver;
 import com.ufcg.apihealthnotes.infra.security.TokenJWT;
 import com.ufcg.apihealthnotes.infra.security.TokenService;
 import com.ufcg.apihealthnotes.repositories.CaregiverRepository;

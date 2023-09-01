@@ -25,7 +25,7 @@ public class ChecklistItem {
 	private boolean marked;
 
     @ManyToOne
-    @JoinColumn(name = "patientId")
+    @JoinColumn(name = "patient_id")
     @JsonIgnore
     private Patient patient;
 	

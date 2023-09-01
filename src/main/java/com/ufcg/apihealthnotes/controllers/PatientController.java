@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ufcg.apihealthnotes.dto.CaregiverPatientDTO;
+import com.ufcg.apihealthnotes.dto.NewPatientDTO;
 import com.ufcg.apihealthnotes.dto.ChecklistItemDTO;
 import com.ufcg.apihealthnotes.dto.ComorbiditiesDTO;
 import com.ufcg.apihealthnotes.dto.ComplexProceduresDTO;
@@ -38,15 +38,7 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
     
-    @PostMapping
-    public ResponseEntity<?> savePatient(@RequestBody CaregiverPatientDTO caregiverPatientDTO) {
-        try {
-            Patient patient = patientService.savePatient(caregiverPatientDTO);
-            return new ResponseEntity<>(patient, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+
 
     @GetMapping
     public ResponseEntity<?> getAllPatients() {

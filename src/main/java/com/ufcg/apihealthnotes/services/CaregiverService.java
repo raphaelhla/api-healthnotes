@@ -7,10 +7,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ufcg.apihealthnotes.dto.AppointmentDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverDTO;
 import com.ufcg.apihealthnotes.dto.CaregiverRegisterDTO;
-import com.ufcg.apihealthnotes.entities.Caregiver;
-import com.ufcg.apihealthnotes.entities.CaregiverPatient;
 import com.ufcg.apihealthnotes.entities.Patient;
+import com.ufcg.apihealthnotes.entities.caregiver.Caregiver;
+import com.ufcg.apihealthnotes.entities.caregiver.CaregiverPatient;
+import com.ufcg.apihealthnotes.enums.DayOfWeek;
+import com.ufcg.apihealthnotes.repositories.AppointmentRepository;
 import com.ufcg.apihealthnotes.repositories.CaregiverPatientRepository;
 import com.ufcg.apihealthnotes.repositories.CaregiverRepository;
 import com.ufcg.apihealthnotes.repositories.PatientRepository;
@@ -26,24 +30,35 @@ public class CaregiverService {
     
 	@Autowired
 	private CaregiverPatientRepository caregiverPatientRepository;
+	
+	@Autowired
+	private AppointmentRepository appointmentRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public Caregiver saveCaregiver(Caregiver caregiver) {
+    	return caregiverRepository.save(caregiver);
+    }
+    
     @Transactional
-    public Caregiver saveCaregiver(CaregiverRegisterDTO dadosCadastro) {
-        Caregiver caregiver = new Caregiver();
-        caregiver.setEmail(dadosCadastro.email());
-        caregiver.setPassword(passwordEncoder.encode(dadosCadastro.password()));
-        caregiver.setCpf(dadosCadastro.cpf());
-        caregiver.setName(dadosCadastro.name());
-        caregiver.setLastname(dadosCadastro.lastname());
-
-        return this.caregiverRepository.save(caregiver);
+    public CaregiverDTO saveCaregiver(CaregiverRegisterDTO dadosCadastro) {
+    	String passwordCriptografado = passwordEncoder.encode(dadosCadastro.password());
+        
+    	Caregiver caregiver = new Caregiver(dadosCadastro);
+        caregiver.setPassword(passwordCriptografado);
+        
+//        CaregiverWeeklySchedule caregiverWeeklySchedule = new CaregiverWeeklySchedule(caregiver);
+//        caregiver.setWeeklySchedule(caregiverWeeklySchedule);
+        
+        caregiverRepository.save(caregiver);
+        
+        return new CaregiverDTO(caregiver);
     }
 
-    public Caregiver getCaregiver(String cpf) {
-        return this.caregiverRepository.findById(cpf).orElseThrow(() -> new IllegalArgumentException("Cuidador não encontrado"));
+    public CaregiverDTO getCaregiverInfo(String caregiverCpf) {
+		Caregiver caregiver = getCaregiver(caregiverCpf);
+        return new CaregiverDTO(caregiver);
     }
     
     public void pararDeAcompanharPaciente(String caregiverCpf, String patientCpf) {
@@ -74,4 +89,13 @@ public class CaregiverService {
 		
 		return monthlyCost;
 	}
+	
+    public Caregiver getCaregiver(String cpf) {
+        return this.caregiverRepository.findById(cpf)
+        		.orElseThrow(() -> new IllegalArgumentException("Cuidador não encontrado"));
+    }
+    
+    public List<AppointmentDTO> getAppointmentsOfDay(DayOfWeek dayName, String caregiverCpf){
+    	return appointmentRepository.findAllByDayOfWeekAndCaregiverCpf(dayName, caregiverCpf);
+    }
 }
