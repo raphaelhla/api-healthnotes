@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ufcg.apihealthnotes.dto.CaregiverDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverUpdateDTO;
 import com.ufcg.apihealthnotes.dto.NewPatientDTO;
 import com.ufcg.apihealthnotes.entities.Patient;
 import com.ufcg.apihealthnotes.enums.DayOfWeek;
@@ -37,6 +38,12 @@ public class CaregiverController {
     @GetMapping("/{cpf}")
     public ResponseEntity<?> getCaregiverInfo(@PathVariable String cpf) {
             CaregiverDTO caregiver = caregiverService.getCaregiverInfo(cpf);
+            return new ResponseEntity<>(caregiver, HttpStatus.OK);
+    }
+    
+    @PutMapping("/{cpf}")
+    public ResponseEntity<?> updateCaregiver(@PathVariable String cpf, @RequestBody CaregiverUpdateDTO caregiverUpdateDTO) {
+            CaregiverDTO caregiver = caregiverService.updateCaregiver(cpf, caregiverUpdateDTO);
             return new ResponseEntity<>(caregiver, HttpStatus.OK);
     }
     

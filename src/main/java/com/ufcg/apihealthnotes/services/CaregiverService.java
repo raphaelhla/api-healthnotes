@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ufcg.apihealthnotes.dto.AppointmentDTO;
 import com.ufcg.apihealthnotes.dto.CaregiverDTO;
 import com.ufcg.apihealthnotes.dto.CaregiverRegisterDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverUpdateDTO;
 import com.ufcg.apihealthnotes.entities.Patient;
 import com.ufcg.apihealthnotes.entities.caregiver.Caregiver;
 import com.ufcg.apihealthnotes.entities.caregiver.CaregiverPatient;
@@ -61,9 +62,17 @@ public class CaregiverService {
         return new CaregiverDTO(caregiver);
     }
     
+	public CaregiverDTO updateCaregiver(String caregiverCpf, CaregiverUpdateDTO caregiverUpdateDTO) {
+		Caregiver caregiver = getCaregiver(caregiverCpf);
+		
+		caregiver.updateFromDTO(caregiverUpdateDTO);
+        caregiverRepository.save(caregiver);
+
+        return new CaregiverDTO(caregiver);
+	}
+    
     public void pararDeAcompanharPaciente(String caregiverCpf, String patientCpf) {
-//        Caregiver caregiver = (Caregiver) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	Caregiver caregiver = caregiverRepository.findById(caregiverCpf).orElseThrow(() -> new IllegalArgumentException("Cuidador não encontrado"));
+    	Caregiver caregiver = getCaregiver(caregiverCpf);
         Patient patient = patientRepository.findById(patientCpf).orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado"));
         
 //        caregiver.getPatients().remove(patient);
@@ -98,4 +107,5 @@ public class CaregiverService {
     public List<AppointmentDTO> getAppointmentsOfDay(DayOfWeek dayName, String caregiverCpf){
     	return appointmentRepository.findAllByDayOfWeekAndCaregiverCpf(dayName, caregiverCpf);
     }
+
 }

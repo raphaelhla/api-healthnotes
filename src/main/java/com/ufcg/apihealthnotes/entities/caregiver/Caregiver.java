@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ufcg.apihealthnotes.dto.CaregiverRegisterDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverUpdateDTO;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -126,5 +127,11 @@ public class Caregiver implements UserDetails {
 
 	public void addCaregiverPatient(CaregiverPatient caregiverPatient) {
 		this.caregiverPatients.add(caregiverPatient);
+	}
+
+	public void updateFromDTO(CaregiverUpdateDTO caregiverUpdateDTO) {
+//		this.email = caregiverUpdateDTO.email();
+		this.name = caregiverUpdateDTO.name();
+		this.lastname = caregiverUpdateDTO.lastname();
 	}
 }
