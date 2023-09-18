@@ -19,16 +19,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @SecurityRequirement(name = "bearer-key")
 public class CalendarController {
 
-    @Autowired
-    private CalendarService calendarService;
-    
-    @DeleteMapping("/{calendarId}/schedule/{scheduleId}")
-    public ResponseEntity<?> deleteSchedule(@PathVariable Long calendarId, @PathVariable Long scheduleId) {
-        try {
-        	calendarService.deleteSchedule(calendarId, scheduleId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+	@Autowired
+	private CalendarService calendarService;
+
+	@DeleteMapping("/{calendarId}/schedule/{scheduleId}")
+	public ResponseEntity<?> deleteSchedule(@PathVariable Long calendarId, @PathVariable Long scheduleId) {
+		calendarService.deleteSchedule(calendarId, scheduleId);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
 }
