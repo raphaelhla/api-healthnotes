@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ufcg.apihealthnotes.entities.Calendar;
+import com.ufcg.apihealthnotes.exception.paciente.CalendarNaoEncontradoException;
 import com.ufcg.apihealthnotes.repositories.CalendarRepository;
 
 @Service
@@ -33,7 +34,7 @@ public class CalendarService {
 	}
 
 	private Calendar getCalendarById(Long calendarId) {
-        return this.calendarRepository.findById(calendarId).orElseThrow(() -> new IllegalArgumentException("Calendário não encontrado"));
+        return this.calendarRepository.findById(calendarId).orElseThrow(() -> new CalendarNaoEncontradoException());
 
 	}
 

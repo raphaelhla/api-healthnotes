@@ -15,6 +15,8 @@ import com.ufcg.apihealthnotes.entities.Patient;
 import com.ufcg.apihealthnotes.entities.caregiver.Caregiver;
 import com.ufcg.apihealthnotes.entities.caregiver.CaregiverPatient;
 import com.ufcg.apihealthnotes.enums.DayOfWeek;
+import com.ufcg.apihealthnotes.exception.cuidador.CuidadorNaoEncontradoException;
+import com.ufcg.apihealthnotes.exception.paciente.PacienteNaoEncontradoException;
 import com.ufcg.apihealthnotes.repositories.AppointmentRepository;
 import com.ufcg.apihealthnotes.repositories.CaregiverPatientRepository;
 import com.ufcg.apihealthnotes.repositories.CaregiverRepository;
@@ -73,7 +75,7 @@ public class CaregiverService {
     
     public void pararDeAcompanharPaciente(String caregiverCpf, String patientCpf) {
     	Caregiver caregiver = getCaregiver(caregiverCpf);
-        Patient patient = patientRepository.findById(patientCpf).orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado"));
+        Patient patient = patientRepository.findById(patientCpf).orElseThrow(() -> new PacienteNaoEncontradoException());
         
 //        caregiver.getPatients().remove(patient);
 //        patient.getCaregivers().remove(caregiver);
@@ -101,7 +103,7 @@ public class CaregiverService {
 	
     public Caregiver getCaregiver(String cpf) {
         return this.caregiverRepository.findById(cpf)
-        		.orElseThrow(() -> new IllegalArgumentException("Cuidador não encontrado"));
+        		.orElseThrow(() -> new CuidadorNaoEncontradoException());
     }
     
     public List<AppointmentDTO> getAppointmentsOfDay(DayOfWeek dayName, String caregiverCpf){
