@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.ufcg.apihealthnotes.dto.CaregiverRegisterDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverPostRequestDTO;
 import com.ufcg.apihealthnotes.dto.CaregiverUpdateDTO;
 
 import jakarta.persistence.CascadeType;
@@ -22,6 +22,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +36,7 @@ import lombok.Setter;
 //@NoArgsConstructor
 @JsonIgnoreProperties(value = { "accountNonLocked", "credentialsNonExpired", "accountNonExpired", "enabled",
 		"authorities", "username" })
+@Builder
 public class Caregiver implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -75,12 +77,12 @@ public class Caregiver implements UserDetails {
 //        this.weeklySchedule = new CaregiverWeeklySchedule(this);
 	}
 
-	public Caregiver(CaregiverRegisterDTO dadosCadastro) {
-		this.cpf = dadosCadastro.cpf();
-		this.email = dadosCadastro.email();
-		this.password = dadosCadastro.password();
-		this.name = dadosCadastro.name();
-		this.lastname = dadosCadastro.lastname();
+	public Caregiver(CaregiverPostRequestDTO caregiverDTO) {
+		this.cpf = caregiverDTO.getCpf();
+		this.email = caregiverDTO.getEmail();
+		this.password = caregiverDTO.getPassword();
+		this.name = caregiverDTO.getName();
+		this.lastname = caregiverDTO.getLastname();
 		
 		this.caregiverPatients = new HashSet<>();
 //        this.weeklySchedule = new CaregiverWeeklySchedule(this);

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ufcg.apihealthnotes.dto.CaregiverDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverResponseDTO;
 import com.ufcg.apihealthnotes.dto.CaregiverUpdateDTO;
 import com.ufcg.apihealthnotes.dto.NewPatientDTO;
 import com.ufcg.apihealthnotes.entities.Patient;
@@ -37,14 +37,14 @@ public class CaregiverController {
 
 	@GetMapping("/{cpf}")
 	public ResponseEntity<?> getCaregiverInfo(@PathVariable String cpf) {
-		CaregiverDTO caregiver = caregiverService.getCaregiverInfo(cpf);
+		CaregiverResponseDTO caregiver = caregiverService.getCaregiverInfo(cpf);
 		return ResponseEntity.status(HttpStatus.OK).body(caregiver);
 	}
 
 	@PutMapping("/{cpf}")
 	public ResponseEntity<?> updateCaregiver(@PathVariable String cpf,
 			@RequestBody CaregiverUpdateDTO caregiverUpdateDTO) {
-		CaregiverDTO caregiver = caregiverService.updateCaregiver(cpf, caregiverUpdateDTO);
+		CaregiverResponseDTO caregiver = caregiverService.updateCaregiver(cpf, caregiverUpdateDTO);
 		return ResponseEntity.status(HttpStatus.OK).body(caregiver);
 	}
 

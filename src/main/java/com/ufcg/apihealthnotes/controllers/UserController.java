@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ufcg.apihealthnotes.dto.CaregiverAutenticationDTO;
-import com.ufcg.apihealthnotes.dto.CaregiverRegisterDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverPostRequestDTO;
 import com.ufcg.apihealthnotes.services.UserService;
 
 import jakarta.validation.Valid;
@@ -24,16 +24,16 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> efetuarLogin(@RequestBody @Valid CaregiverAutenticationDTO dadosAutenticacao) {
+    public ResponseEntity<?> efetuarLogin(@RequestBody @Valid CaregiverAutenticationDTO caregiverDTO) {
         return ResponseEntity
         		.status(HttpStatus.OK)
-        		.body(userService.efetuarLogin(dadosAutenticacao));
+        		.body(userService.efetuarLogin(caregiverDTO));
     }
 
     @PostMapping("/cadastro")
-    public ResponseEntity<?> efetuarCadastro(@RequestBody @Valid CaregiverRegisterDTO dadosCadastro) {
+    public ResponseEntity<?> efetuarCadastro(@RequestBody @Valid CaregiverPostRequestDTO caregiverDTO) {
     	return ResponseEntity
         		.status(HttpStatus.CREATED)
-        		.body(userService.efetuarCadastro(dadosCadastro));
+        		.body(userService.efetuarCadastro(caregiverDTO));
     }
 }

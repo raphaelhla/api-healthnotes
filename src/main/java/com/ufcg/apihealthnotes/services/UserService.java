@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ufcg.apihealthnotes.dto.CaregiverAutenticationDTO;
-import com.ufcg.apihealthnotes.dto.CaregiverDTO;
-import com.ufcg.apihealthnotes.dto.CaregiverRegisterDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverResponseDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverPostRequestDTO;
 import com.ufcg.apihealthnotes.entities.caregiver.Caregiver;
 import com.ufcg.apihealthnotes.infra.security.TokenJWT;
 import com.ufcg.apihealthnotes.infra.security.TokenService;
@@ -49,14 +49,14 @@ public class UserService implements UserDetailsService {
         return new TokenJWT(tokenJWT, caregiver.getName(), caregiver.getCpf());
     }
 
-    public CaregiverDTO efetuarCadastro(@RequestBody @Valid CaregiverRegisterDTO dadosCadastro) {
-        if (caregiverRepository.existsByEmail(dadosCadastro.email())) {
-            throw new IllegalArgumentException("An account with this Login already exists: " + dadosCadastro.email());
+    public CaregiverResponseDTO efetuarCadastro(@RequestBody @Valid CaregiverPostRequestDTO caregiverDTO) {
+        if (caregiverRepository.existsByEmail(caregiverDTO.getEmail())) {
+            throw new IllegalArgumentException("An account with this Login already exists: " + caregiverDTO.getEmail());
         }
-        if (!(dadosCadastro.password().equals(dadosCadastro.confirmPassword()))) {
+        if (!(caregiverDTO.getPassword().equals(caregiverDTO.getConfirmPassword()))) {
         	throw new IllegalArgumentException("The passwords do not match!");
         }
 
-        return caregiverService.saveCaregiver(dadosCadastro);
+        return caregiverService.saveCaregiver(caregiverDTO);
     }
 }
