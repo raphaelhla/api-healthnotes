@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ufcg.apihealthnotes.dto.CaregiverDTO;
+import com.ufcg.apihealthnotes.dto.CaregiverResponseDTO;
 import com.ufcg.apihealthnotes.dto.CaregiverUpdateDTO;
 import com.ufcg.apihealthnotes.dto.NewPatientDTO;
 import com.ufcg.apihealthnotes.entities.Patient;
@@ -29,71 +29,53 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @SecurityRequirement(name = "bearer-key")
 public class CaregiverController {
 
-    @Autowired
-    private CaregiverService caregiverService;
-    
-    @Autowired
-    private PatientService patientService;
+	@Autowired
+	private CaregiverService caregiverService;
 
-    @GetMapping("/{cpf}")
-    public ResponseEntity<?> getCaregiverInfo(@PathVariable String cpf) {
-            CaregiverDTO caregiver = caregiverService.getCaregiverInfo(cpf);
-            return new ResponseEntity<>(caregiver, HttpStatus.OK);
-    }
-    
-    @PutMapping("/{cpf}")
-    public ResponseEntity<?> updateCaregiver(@PathVariable String cpf, @RequestBody CaregiverUpdateDTO caregiverUpdateDTO) {
-            CaregiverDTO caregiver = caregiverService.updateCaregiver(cpf, caregiverUpdateDTO);
-            return new ResponseEntity<>(caregiver, HttpStatus.OK);
-    }
-    
-    @PostMapping("/{caregiverCpf}/patient")
-    public ResponseEntity<?> savePatient(@PathVariable String caregiverCpf, @RequestBody NewPatientDTO newPatientDTO) {
-        try {
-            Patient patient = patientService.savePatient(newPatientDTO);
-            patientService.addPatientInfo(newPatientDTO, caregiverCpf);
-            return new ResponseEntity<>(patient, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-    
-    @PutMapping("/{caregiverCpf}/patient/{patientCpf}")
-    public ResponseEntity<?> pararDeAcompanharPaciente(@PathVariable String caregiverCpf, @PathVariable String patientCpf) {
-        try {
-            caregiverService.pararDeAcompanharPaciente(caregiverCpf, patientCpf);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-    
-    @GetMapping("/{caregiverCpf}/number-patients")
-    public ResponseEntity<?> getNumberPatients(@PathVariable String caregiverCpf) {
-        try {
-            Integer numPatients = caregiverService.getNumberPatients(caregiverCpf);
-            return new ResponseEntity<>(numPatients, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-    
-    @GetMapping("/{caregiverCpf}/monthly-cost")
-    public ResponseEntity<?> getMonthlyCost(@PathVariable String caregiverCpf) {
-        try {
-            Double monthlyCost = caregiverService.getMonthlyCost(caregiverCpf);
-            return new ResponseEntity<>(monthlyCost, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
+	@Autowired
+	private PatientService patientService;
 
-    @GetMapping("/{caregiverCpf}/appointments")
-    public ResponseEntity<?> getAppointmentsOfDay(@PathVariable String caregiverCpf, @RequestParam DayOfWeek dayName) {
-        try {
-            return new ResponseEntity<>(caregiverService.getAppointmentsOfDay(dayName, caregiverCpf), HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
+	@GetMapping("/{cpf}")
+	public ResponseEntity<?> getCaregiverInfo(@PathVariable String cpf) {
+		CaregiverResponseDTO caregiver = caregiverService.getCaregiverInfo(cpf);
+		return ResponseEntity.status(HttpStatus.OK).body(caregiver);
+	}
+
+	@PutMapping("/{cpf}")
+	public ResponseEntity<?> updateCaregiver(@PathVariable String cpf,
+			@RequestBody CaregiverUpdateDTO caregiverUpdateDTO) {
+		CaregiverResponseDTO caregiver = caregiverService.updateCaregiver(cpf, caregiverUpdateDTO);
+		return ResponseEntity.status(HttpStatus.OK).body(caregiver);
+	}
+
+	@PostMapping("/{caregiverCpf}/patient")
+	public ResponseEntity<?> savePatient(@PathVariable String caregiverCpf, @RequestBody NewPatientDTO newPatientDTO) {
+		Patient patient = patientService.savePatient(newPatientDTO);
+		patientService.addPatientInfo(newPatientDTO, caregiverCpf);
+		return ResponseEntity.status(HttpStatus.CREATED).body(patient);
+	}
+
+	@PutMapping("/{caregiverCpf}/patient/{patientCpf}")
+	public ResponseEntity<?> pararDeAcompanharPaciente(@PathVariable String caregiverCpf,
+			@PathVariable String patientCpf) {
+		caregiverService.pararDeAcompanharPaciente(caregiverCpf, patientCpf);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+
+	@GetMapping("/{caregiverCpf}/number-patients")
+	public ResponseEntity<?> getNumberPatients(@PathVariable String caregiverCpf) {
+		Integer numPatients = caregiverService.getNumberPatients(caregiverCpf);
+		return ResponseEntity.status(HttpStatus.OK).body(numPatients);
+	}
+
+	@GetMapping("/{caregiverCpf}/monthly-cost")
+	public ResponseEntity<?> getMonthlyCost(@PathVariable String caregiverCpf) {
+		Double monthlyCost = caregiverService.getMonthlyCost(caregiverCpf);
+		return ResponseEntity.status(HttpStatus.OK).body(monthlyCost);
+	}
+
+	@GetMapping("/{caregiverCpf}/appointments")
+	public ResponseEntity<?> getAppointmentsOfDay(@PathVariable String caregiverCpf, @RequestParam DayOfWeek dayName) {
+		return ResponseEntity.status(HttpStatus.OK).body(caregiverService.getAppointmentsOfDay(dayName, caregiverCpf));
+	}
 }

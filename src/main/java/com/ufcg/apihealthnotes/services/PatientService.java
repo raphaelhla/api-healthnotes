@@ -26,6 +26,8 @@ import com.ufcg.apihealthnotes.entities.Patient;
 import com.ufcg.apihealthnotes.entities.Schedule;
 import com.ufcg.apihealthnotes.entities.caregiver.Caregiver;
 import com.ufcg.apihealthnotes.entities.caregiver.CaregiverPatient;
+import com.ufcg.apihealthnotes.exception.paciente.ChecklistItemNaoEncontradoException;
+import com.ufcg.apihealthnotes.exception.paciente.PacienteNaoEncontradoException;
 import com.ufcg.apihealthnotes.repositories.CaregiverPatientRepository;
 import com.ufcg.apihealthnotes.repositories.ChecklistItemRepository;
 import com.ufcg.apihealthnotes.repositories.PatientRepository;
@@ -91,7 +93,7 @@ public class PatientService {
 
 	public Patient getPatientByCpf(String cpf) {
 		return this.patientRepository.findById(cpf)
-				.orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado"));
+				.orElseThrow(() -> new PacienteNaoEncontradoException());
 	}
 
 	public void deletePatient(String cpf) {
@@ -204,11 +206,14 @@ public class PatientService {
 		ChecklistItem checklistItem = checklistItemRepository.findByIdAndPatient(checklistItemId, patient);
 
 		if (checklistItem == null) {
-			throw new IllegalArgumentException(
-					String.format("Não existe nenhum ChecklistItem com o id %d associado ao paciente com o cpf %s",
-							checklistItemId, patient.getCpf()));
+			throw new ChecklistItemNaoEncontradoException(checklistItemId, patient.getCpf());
 		}
 
 		return checklistItem;
+	}
+
+	public void uncheckAllChecklistItem(String cpfPatient) {
+		Patient patient = getPatientByCpf(cpfPatient);
+		patient.getChecklist().forEach(cl -> cl.setMarked(false));
 	}
 }
