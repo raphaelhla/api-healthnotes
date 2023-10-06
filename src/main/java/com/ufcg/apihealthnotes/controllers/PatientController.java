@@ -112,4 +112,10 @@ public class PatientController {
 		patientService.updateChecklistItem(cpfPatient, checklistItemId);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
+	
+	@PutMapping("/{cpfPatient}/checklist")
+	public ResponseEntity<?> uncheckAllChecklistItem(@PathVariable String cpfPatient) {
+		patientService.uncheckAllChecklistItem(cpfPatient);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 }

@@ -211,4 +211,9 @@ public class PatientService {
 
 		return checklistItem;
 	}
+
+	public void uncheckAllChecklistItem(String cpfPatient) {
+		Patient patient = getPatientByCpf(cpfPatient);
+		patient.getChecklist().forEach(cl -> cl.setMarked(false));
+	}
 }
