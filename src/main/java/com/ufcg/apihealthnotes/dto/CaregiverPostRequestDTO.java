@@ -18,18 +18,18 @@ public class CaregiverPostRequestDTO {
 		@JsonProperty("email")
 		private String email;
 		
-		@JsonProperty("email")
+		@JsonProperty("password")
 		private String password;
 		
-		@JsonProperty("email")
+		@JsonProperty("confirmPassword")
 		private String confirmPassword;
 		
-		@JsonProperty("email")
+		@JsonProperty("cpf")
 		private String cpf;
 
-		@JsonProperty("email")
+		@JsonProperty("name")
 		private String name;
 		
-		@JsonProperty("email")
+		@JsonProperty("lastname")
 		private String lastname;
 }

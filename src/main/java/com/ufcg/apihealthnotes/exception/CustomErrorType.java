@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomErrorType {
+	
     @JsonProperty("timestamp")
     private LocalDateTime timestamp;
     @JsonProperty("message")
